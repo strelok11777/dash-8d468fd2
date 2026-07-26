@@ -193,11 +193,14 @@ const SVGNS='http://www.w3.org/2000/svg';
 function fmtD(s){const[y,m,d]=s.split('-');return `${d}.${m}.${y}`;}
 function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-const allDates=DATA.map(r=>r['Дата']).sort();
-const minD=allDates[0],maxD=allDates[allDates.length-1];
-document.getElementById('dFrom').value=minD;
-document.getElementById('dTo').value=maxD;
-document.getElementById('periodLabel').textContent=`Період ${fmtD(minD)} – ${fmtD(maxD)} · менеджер Влад · воронка продажів по каналах`;
+let minD='', maxD='';
+function setupDates(){
+  const allDates=DATA.map(r=>r['Дата']).sort();
+  minD=allDates[0];maxD=allDates[allDates.length-1];
+  document.getElementById('dFrom').value=minD;
+  document.getElementById('dTo').value=maxD;
+  document.getElementById('periodLabel').textContent=`Період ${fmtD(minD)} – ${fmtD(maxD)} · менеджер Влад · воронка продажів по каналах`;
+}
 
 function filtered(){
   const f=document.getElementById('dFrom').value,t=document.getElementById('dTo').value;
@@ -357,6 +360,7 @@ async function boot(){
 }
 
 function initAll(){
+  setupDates();
 document.querySelectorAll('.chip[data-ch]').forEach(el=>el.addEventListener('click',()=>{
   document.querySelectorAll('.chip[data-ch]').forEach(x=>x.classList.remove('on'));el.classList.add('on');activeCh=el.dataset.ch;render();}));
 document.getElementById('dFrom').addEventListener('change',render);
