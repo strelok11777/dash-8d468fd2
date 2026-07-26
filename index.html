@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiMiMi — Дашборд інтернет-відділу</title>
+<style>
+:root{
+  --bg:#0f1120; --panel:#191c33; --panel2:#20243f; --line:#2c3154;
+  --txt:#eef0ff; --muted:#9aa0c4; --accent:#ff6fae; --accent2:#7c8bff;
+  --c-site:#3ecf8e; --c-tg:#7c8bff; --c-tt:#ff6fae; --c-ig:#ffb454;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt);padding:22px;line-height:1.4}
+h1{font-size:24px;font-weight:700}
+h2{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.wrap{max-width:1280px;margin:0 auto}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.toolbar .grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.toolbar label{font-size:12px;color:var(--muted);margin-right:4px}
+.chip{padding:7px 13px;border-radius:9px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;font-size:13px;transition:.15s;user-select:none}
+.chip:hover{border-color:var(--accent2)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#1a0d18;font-weight:600}
+input[type=date]{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:13px;font-family:inherit}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.kpi .lab{font-size:12px;color:var(--muted);margin-bottom:6px}
+.kpi .val{font-size:26px;font-weight:700}
+.kpi .val small{font-size:14px;color:var(--muted);font-weight:400}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card.full{grid-column:1/-1}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase}
+tbody tr:hover{background:var(--panel2)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:middle}
+.funnel{display:flex;flex-direction:column;gap:8px}
+.funnel .stage{display:flex;align-items:center;gap:12px}
+.funnel .fbar{height:34px;border-radius:8px;background:linear-gradient(90deg,var(--accent2),var(--accent));display:flex;align-items:center;padding:0 12px;color:#fff;font-weight:600;font-size:13px;min-width:60px;transition:.3s}
+.funnel .fmeta{font-size:12px;color:var(--muted);white-space:nowrap}
+.legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:12px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:5px}
+.foot{color:var(--muted);font-size:12px;margin-top:20px;text-align:center}
+.insight{background:linear-gradient(135deg,#241a33,#1a1d3a);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 14px;font-size:13px;margin-bottom:10px}
+.insight b{color:var(--accent)}
+svg{width:100%;height:auto;display:block;overflow:visible}
+.tick{fill:var(--muted);font-size:11px}
+.gline{stroke:var(--line);stroke-width:1}
+.blab{fill:var(--txt);font-size:11px;font-weight:600}
+@media(max-width:900px){.grid,.grid3{grid-template-columns:1fr}}
+@media(max-width:600px){body{padding:10px}h1{font-size:19px}.kpi .val{font-size:21px}}
+.cmp-toolbar{display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.cmp-controls{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:8px;align-items:flex-start}
+.cmp-col{display:flex;flex-direction:column;gap:5px}
+.cmp-col .tag{font-size:12px;font-weight:700}
+.cmp-col .tagA{color:#7c8bff}.cmp-col .tagB{color:#ff6fae}
+.cmp-col .span{font-size:11px;color:var(--muted)}
+.cmp-note{font-size:12px;color:var(--muted);margin:6px 0 16px}
+.cmp-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:12px}
+.cmp-metric{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.cmp-metric .lab{font-size:11px;color:var(--muted);margin-bottom:7px;min-height:28px}
+.cmp-metric .ab{display:flex;justify-content:space-between;font-size:13px;gap:8px}
+.cmp-metric .a{color:#a9b3ff}.cmp-metric .b{color:#ffa6ce}
+.cmp-metric .delta{margin-top:8px;font-size:15px;font-weight:700}
+.delta.up{color:#3ecf8e}.delta.down{color:#ff6b6b}.delta.flat{color:var(--muted)}
+#cmpTable td.up{color:#3ecf8e}#cmpTable td.down{color:#ff6b6b}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div>
+    <h1>🌸 MiMiMi — Дашборд інтернет-відділу</h1>
+    <div class="sub" id="periodLabel">Воронка продажів по каналах · менеджер Влад</div>
+  </div>
+
+  <div class="toolbar">
+    <div class="grp">
+      <label>Канали:</label>
+      <span class="chip on" data-ch="all">Усі</span>
+      <span class="chip" data-ch="Сайт"><span class="dot" style="background:var(--c-site)"></span>Сайт</span>
+      <span class="chip" data-ch="Tg/Vb"><span class="dot" style="background:var(--c-tg)"></span>Tg/Vb</span>
+      <span class="chip" data-ch="TikTok"><span class="dot" style="background:var(--c-tt)"></span>TikTok</span>
+      <span class="chip" data-ch="Instagram"><span class="dot" style="background:var(--c-ig)"></span>Instagram</span>
+    </div>
+    <div class="grp" style="margin-left:auto">
+      <label>Період:</label>
+      <input type="date" id="dFrom"><span style="color:var(--muted)">—</span><input type="date" id="dTo">
+      <span class="chip" id="resetBtn">Скинути</span>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+  <div class="card full" id="cmpCard" style="margin-bottom:16px">
+    <h2>⚖️ Порівняння двох періодів</h2>
+    <div class="cmp-toolbar">
+      <label style="font-size:12px;color:var(--muted)">Режим:</label>
+      <span class="chip on" data-mode="month">По місяцях</span>
+      <span class="chip" data-mode="range">Довільні дати</span>
+      <label style="font-size:12px;color:var(--muted);margin-left:14px">Показ:</label>
+      <span class="chip on" data-norm="total">Всього</span>
+      <span class="chip" data-norm="day">У середньому за день</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--muted)">🟢 зростання · 🔴 спад (B відносно A)</span>
+    </div>
+    <div class="cmp-controls" id="cmpControls"></div>
+    <div class="cmp-note" id="cmpNote"></div>
+    <div class="cmp-metrics" id="cmpMetrics"></div>
+    <h2 style="margin-top:20px">По каналах: A → B</h2>
+    <table id="cmpTable"></table>
+  </div>
+
+
+  <div class="grid">
+    <div class="card">
+      <h2>Воронка (за фільтром)</h2>
+      <div class="funnel" id="funnel"></div>
+    </div>
+    <div class="card">
+      <h2>Виручка по каналах</h2>
+      <div id="revChart"></div>
+    </div>
+  </div>
+
+  <div class="grid3">
+    <div class="card"><h2>Конверсія звернення→замовлення</h2><div id="crChart"></div></div>
+    <div class="card"><h2>Частка виручки</h2><div id="shareChart"></div></div>
+    <div class="card"><h2>Середній чек, грн</h2><div id="checkChart"></div></div>
+  </div>
+
+  <div class="card full" style="margin-bottom:16px">
+    <h2>Динаміка по тижнях</h2>
+    <div id="weekChart"></div>
+  </div>
+
+  <div class="card full" style="margin-bottom:16px">
+    <h2>Щоденна динаміка: звернення · замовлення · виручка</h2>
+    <div id="dayChart"></div>
+  </div>
+
+  <div class="card full" style="margin-bottom:16px">
+    <h2>Зведення по каналах</h2>
+    <table id="chTable"></table>
+  </div>
+
+  <div class="card full">
+    <h2>Що видно з даних</h2>
+    <div id="insights"></div>
+  </div>
+
+  <div class="foot">Офлайн-версія · працює без інтернету · дані очищено від порожніх і дубльованих рядків · конверсії перераховано з нуля</div>
+</div>
+
+<script>
+const DATA = [{"Дата":"2026-05-19","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-05-19","Канал":"Tg/Vb","inq":3.0,"dlg":2.0,"sel":1.0,"ord":1.0,"rev":4340.0,"undone":0.0},{"Дата":"2026-05-19","Канал":"TikTok","inq":14.0,"dlg":14.0,"sel":4.0,"ord":2.0,"rev":1200.0,"undone":2.0},{"Дата":"2026-05-19","Канал":"Сайт","inq":2.0,"dlg":2.0,"sel":1.0,"ord":2.0,"rev":4330.0,"undone":-1.0},{"Дата":"2026-05-21","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-05-21","Канал":"Tg/Vb","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-05-21","Канал":"TikTok","inq":20.0,"dlg":20.0,"sel":7.0,"ord":1.0,"rev":950.0,"undone":6.0},{"Дата":"2026-05-21","Канал":"Сайт","inq":1.0,"dlg":4.0,"sel":4.0,"ord":4.0,"rev":7750.0,"undone":0.0},{"Дата":"2026-05-22","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-05-22","Канал":"Tg/Vb","inq":3.0,"dlg":3.0,"sel":2.0,"ord":1.0,"rev":2400.0,"undone":1.0},{"Дата":"2026-05-22","Канал":"TikTok","inq":17.0,"dlg":17.0,"sel":5.0,"ord":2.0,"rev":7800.0,"undone":3.0},{"Дата":"2026-05-22","Канал":"Сайт","inq":5.0,"dlg":5.0,"sel":4.0,"ord":4.0,"rev":10050.0,"undone":0.0},{"Дата":"2026-05-23","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-05-23","Канал":"Tg/Vb","inq":3.0,"dlg":2.0,"sel":1.0,"ord":2.0,"rev":4310.0,"undone":-1.0},{"Дата":"2026-05-23","Канал":"TikTok","inq":28.0,"dlg":28.0,"sel":10.0,"ord":4.0,"rev":13710.0,"undone":6.0},{"Дата":"2026-05-23","Канал":"Сайт","inq":5.0,"dlg":5.0,"sel":5.0,"ord":5.0,"rev":6086.0,"undone":0.0},{"Дата":"2026-05-25","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-05-25","Канал":"Tg/Vb","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-05-25","Канал":"TikTok","inq":33.0,"dlg":33.0,"sel":10.0,"ord":6.0,"rev":10580.0,"undone":4.0},{"Дата":"2026-05-25","Канал":"Сайт","inq":4.0,"dlg":4.0,"sel":4.0,"ord":3.0,"rev":18004.0,"undone":1.0},{"Дата":"2026-05-26","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-05-26","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":3820.0,"undone":1.0},{"Дата":"2026-05-26","Канал":"TikTok","inq":32.0,"dlg":32.0,"sel":8.0,"ord":4.0,"rev":11699.0,"undone":4.0},{"Дата":"2026-05-26","Канал":"Сайт","inq":4.0,"dlg":4.0,"sel":4.0,"ord":2.0,"rev":2150.0,"undone":2.0},{"Дата":"2026-05-27","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-05-27","Канал":"Tg/Vb","inq":3.0,"dlg":3.0,"sel":3.0,"ord":2.0,"rev":7109.0,"undone":1.0},{"Дата":"2026-05-27","Канал":"TikTok","inq":28.0,"dlg":28.0,"sel":7.0,"ord":3.0,"rev":6920.0,"undone":4.0},{"Дата":"2026-05-27","Канал":"Сайт","inq":1.0,"dlg":1.0,"sel":1.0,"ord":1.0,"rev":913.0,"undone":0.0},{"Дата":"2026-05-28","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-05-28","Канал":"Tg/Vb","inq":7.0,"dlg":7.0,"sel":5.0,"ord":5.0,"rev":16029.0,"undone":0.0},{"Дата":"2026-05-28","Канал":"TikTok","inq":22.0,"dlg":22.0,"sel":8.0,"ord":1.0,"rev":3999.0,"undone":7.0},{"Дата":"2026-05-28","Канал":"Сайт","inq":2.0,"dlg":2.0,"sel":2.0,"ord":2.0,"rev":3860.0,"undone":0.0},{"Дата":"2026-05-29","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-05-29","Канал":"Tg/Vb","inq":7.0,"dlg":7.0,"sel":4.0,"ord":4.0,"rev":10011.0,"undone":0.0},{"Дата":"2026-05-29","Канал":"TikTok","inq":21.0,"dlg":21.0,"sel":7.0,"ord":2.0,"rev":2350.0,"undone":5.0},{"Дата":"2026-05-29","Канал":"Сайт","inq":2.0,"dlg":2.0,"sel":2.0,"ord":2.0,"rev":2139.0,"undone":0.0},{"Дата":"2026-06-01","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-06-01","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-06-01","Канал":"TikTok","inq":67.0,"dlg":67.0,"sel":15.0,"ord":1.0,"rev":3999.0,"undone":14.0},{"Дата":"2026-06-01","Канал":"Сайт","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-06-02","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-06-02","Канал":"Tg/Vb","inq":4.0,"dlg":4.0,"sel":2.0,"ord":2.0,"rev":1950.0,"undone":0.0},{"Дата":"2026-06-02","Канал":"TikTok","inq":26.0,"dlg":26.0,"sel":9.0,"ord":4.0,"rev":25579.0,"undone":5.0},{"Дата":"2026-06-02","Канал":"Сайт","inq":1.0,"dlg":1.0,"sel":1.0,"ord":1.0,"rev":500.0,"undone":0.0},{"Дата":"2026-06-03","Канал":"Instagram","inq":3.0,"dlg":3.0,"sel":2.0,"ord":2.0,"rev":5255.0,"undone":0.0},{"Дата":"2026-06-03","Канал":"Tg/Vb","inq":4.0,"dlg":4.0,"sel":3.0,"ord":3.0,"rev":11310.0,"undone":0.0},{"Дата":"2026-06-03","Канал":"TikTok","inq":3.0,"dlg":3.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-06-03","Канал":"Сайт","inq":3.0,"dlg":3.0,"sel":3.0,"ord":3.0,"rev":5580.0,"undone":0.0},{"Дата":"2026-06-04","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-06-04","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":1890.0,"undone":1.0},{"Дата":"2026-06-04","Канал":"TikTok","inq":2.0,"dlg":2.0,"sel":1.0,"ord":1.0,"rev":5999.0,"undone":0.0},{"Дата":"2026-06-04","Канал":"Сайт","inq":7.0,"dlg":7.0,"sel":7.0,"ord":6.0,"rev":13120.0,"undone":1.0},{"Дата":"2026-06-05","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-06-05","Канал":"Tg/Vb","inq":7.0,"dlg":7.0,"sel":7.0,"ord":5.0,"rev":8185.0,"undone":2.0},{"Дата":"2026-06-05","Канал":"TikTok","inq":4.0,"dlg":4.0,"sel":2.0,"ord":1.0,"rev":570.0,"undone":1.0},{"Дата":"2026-06-05","Канал":"Сайт","inq":7.0,"dlg":7.0,"sel":6.0,"ord":6.0,"rev":12295.0,"undone":0.0},{"Дата":"2026-06-09","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-06-09","Канал":"Tg/Vb","inq":7.0,"dlg":7.0,"sel":4.0,"ord":4.0,"rev":12030.0,"undone":0.0},{"Дата":"2026-06-09","Канал":"TikTok","inq":9.0,"dlg":9.0,"sel":4.0,"ord":0.0,"rev":0.0,"undone":4.0},{"Дата":"2026-06-09","Канал":"Сайт","inq":9.0,"dlg":9.0,"sel":7.0,"ord":7.0,"rev":11060.0,"undone":0.0},{"Дата":"2026-06-10","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-06-10","Канал":"Tg/Vb","inq":3.0,"dlg":3.0,"sel":2.0,"ord":1.0,"rev":1350.0,"undone":1.0},{"Дата":"2026-06-10","Канал":"TikTok","inq":22.0,"dlg":22.0,"sel":8.0,"ord":5.0,"rev":19589.0,"undone":3.0},{"Дата":"2026-06-10","Канал":"Сайт","inq":2.0,"dlg":2.0,"sel":1.0,"ord":1.0,"rev":390.0,"undone":0.0},{"Дата":"2026-06-11","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-06-11","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":1500.0,"undone":1.0},{"Дата":"2026-06-11","Канал":"TikTok","inq":20.0,"dlg":20.0,"sel":10.0,"ord":2.0,"rev":4449.0,"undone":8.0},{"Дата":"2026-06-11","Канал":"Сайт","inq":8.0,"dlg":8.0,"sel":8.0,"ord":7.0,"rev":14570.0,"undone":1.0},{"Дата":"2026-06-12","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-06-12","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":500.0,"undone":1.0},{"Дата":"2026-06-12","Канал":"TikTok","inq":15.0,"dlg":15.0,"sel":15.0,"ord":3.0,"rev":11330.0,"undone":12.0},{"Дата":"2026-06-12","Канал":"Сайт","inq":4.0,"dlg":4.0,"sel":4.0,"ord":4.0,"rev":5630.0,"undone":0.0},{"Дата":"2026-06-13","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-06-13","Канал":"Tg/Vb","inq":4.0,"dlg":4.0,"sel":4.0,"ord":2.0,"rev":6850.0,"undone":2.0},{"Дата":"2026-06-13","Канал":"TikTok","inq":11.0,"dlg":11.0,"sel":11.0,"ord":0.0,"rev":0.0,"undone":11.0},{"Дата":"2026-06-13","Канал":"Сайт","inq":7.0,"dlg":7.0,"sel":7.0,"ord":6.0,"rev":6286.0,"undone":1.0},{"Дата":"2026-06-15","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-06-15","Канал":"Tg/Vb","inq":6.0,"dlg":6.0,"sel":6.0,"ord":6.0,"rev":13307.0,"undone":0.0},{"Дата":"2026-06-15","Канал":"TikTok","inq":16.0,"dlg":16.0,"sel":16.0,"ord":0.0,"rev":0.0,"undone":16.0},{"Дата":"2026-06-15","Канал":"Сайт","inq":5.0,"dlg":5.0,"sel":5.0,"ord":4.0,"rev":6510.0,"undone":1.0},{"Дата":"2026-06-16","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-06-16","Канал":"Tg/Vb","inq":5.0,"dlg":5.0,"sel":5.0,"ord":3.0,"rev":25545.0,"undone":2.0},{"Дата":"2026-06-16","Канал":"TikTok","inq":27.0,"dlg":27.0,"sel":10.0,"ord":0.0,"rev":0.0,"undone":10.0},{"Дата":"2026-06-16","Канал":"Сайт","inq":6.0,"dlg":6.0,"sel":6.0,"ord":5.0,"rev":8770.0,"undone":1.0},{"Дата":"2026-06-17","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-06-17","Канал":"Tg/Vb","inq":3.0,"dlg":3.0,"sel":3.0,"ord":1.0,"rev":1000.0,"undone":2.0},{"Дата":"2026-06-17","Канал":"TikTok","inq":18.0,"dlg":18.0,"sel":7.0,"ord":0.0,"rev":0.0,"undone":7.0},{"Дата":"2026-06-17","Канал":"Сайт","inq":6.0,"dlg":6.0,"sel":6.0,"ord":5.0,"rev":7590.0,"undone":1.0},{"Дата":"2026-06-18","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-06-18","Канал":"Tg/Vb","inq":3.0,"dlg":3.0,"sel":3.0,"ord":1.0,"rev":1750.0,"undone":2.0},{"Дата":"2026-06-18","Канал":"TikTok","inq":10.0,"dlg":10.0,"sel":5.0,"ord":1.0,"rev":2100.0,"undone":4.0},{"Дата":"2026-06-18","Канал":"Сайт","inq":9.0,"dlg":9.0,"sel":9.0,"ord":8.0,"rev":10814.0,"undone":1.0},{"Дата":"2026-06-19","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-06-19","Канал":"Tg/Vb","inq":1.0,"dlg":1.0,"sel":1.0,"ord":1.0,"rev":2200.0,"undone":0.0},{"Дата":"2026-06-19","Канал":"TikTok","inq":17.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":1725.0,"undone":1.0},{"Дата":"2026-06-19","Канал":"Сайт","inq":4.0,"dlg":4.0,"sel":4.0,"ord":3.0,"rev":2970.0,"undone":1.0},{"Дата":"2026-06-22","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":900.0,"undone":1.0},{"Дата":"2026-06-22","Канал":"Tg/Vb","inq":4.0,"dlg":4.0,"sel":4.0,"ord":2.0,"rev":11500.0,"undone":2.0},{"Дата":"2026-06-22","Канал":"TikTok","inq":5.0,"dlg":5.0,"sel":5.0,"ord":0.0,"rev":0.0,"undone":5.0},{"Дата":"2026-06-22","Канал":"Сайт","inq":4.0,"dlg":4.0,"sel":4.0,"ord":3.0,"rev":6448.0,"undone":1.0},{"Дата":"2026-06-23","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-06-23","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":11500.0,"undone":1.0},{"Дата":"2026-06-23","Канал":"TikTok","inq":13.0,"dlg":13.0,"sel":8.0,"ord":2.0,"rev":9110.0,"undone":6.0},{"Дата":"2026-06-23","Канал":"Сайт","inq":4.0,"dlg":4.0,"sel":4.0,"ord":4.0,"rev":4190.0,"undone":0.0},{"Дата":"2026-06-24","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":2500.0,"undone":1.0},{"Дата":"2026-06-24","Канал":"Tg/Vb","inq":6.0,"dlg":6.0,"sel":6.0,"ord":2.0,"rev":6520.0,"undone":4.0},{"Дата":"2026-06-24","Канал":"TikTok","inq":13.0,"dlg":13.0,"sel":7.0,"ord":2.0,"rev":1690.0,"undone":5.0},{"Дата":"2026-06-24","Канал":"Сайт","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-06-25","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":1.0,"rev":700.0,"undone":0.0},{"Дата":"2026-06-25","Канал":"Tg/Vb","inq":4.0,"dlg":4.0,"sel":4.0,"ord":3.0,"rev":13708.0,"undone":1.0},{"Дата":"2026-06-25","Канал":"TikTok","inq":11.0,"dlg":11.0,"sel":11.0,"ord":0.0,"rev":0.0,"undone":11.0},{"Дата":"2026-06-25","Канал":"Сайт","inq":4.0,"dlg":4.0,"sel":4.0,"ord":4.0,"rev":10183.0,"undone":0.0},{"Дата":"2026-06-26","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-06-26","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-06-26","Канал":"TikTok","inq":19.0,"dlg":19.0,"sel":9.0,"ord":1.0,"rev":600.0,"undone":8.0},{"Дата":"2026-06-26","Канал":"Сайт","inq":2.0,"dlg":2.0,"sel":2.0,"ord":2.0,"rev":2480.0,"undone":0.0},{"Дата":"2026-06-30","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-06-30","Канал":"Tg/Vb","inq":5.0,"dlg":5.0,"sel":5.0,"ord":3.0,"rev":7629.0,"undone":2.0},{"Дата":"2026-06-30","Канал":"TikTok","inq":14.0,"dlg":14.0,"sel":6.0,"ord":1.0,"rev":4000.0,"undone":5.0},{"Дата":"2026-06-30","Канал":"Сайт","inq":7.0,"dlg":7.0,"sel":7.0,"ord":7.0,"rev":7280.0,"undone":0.0},{"Дата":"2026-07-01","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-07-01","Канал":"Tg/Vb","inq":3.0,"dlg":3.0,"sel":2.0,"ord":2.0,"rev":8040.0,"undone":0.0},{"Дата":"2026-07-01","Канал":"TikTok","inq":12.0,"dlg":12.0,"sel":5.0,"ord":0.0,"rev":0.0,"undone":5.0},{"Дата":"2026-07-01","Канал":"Сайт","inq":4.0,"dlg":4.0,"sel":3.0,"ord":3.0,"rev":2180.0,"undone":0.0},{"Дата":"2026-07-02","Канал":"Instagram","inq":1.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-07-02","Канал":"Tg/Vb","inq":5.0,"dlg":5.0,"sel":3.0,"ord":2.0,"rev":4165.0,"undone":1.0},{"Дата":"2026-07-02","Канал":"TikTok","inq":19.0,"dlg":19.0,"sel":8.0,"ord":0.0,"rev":0.0,"undone":8.0},{"Дата":"2026-07-02","Канал":"Сайт","inq":3.0,"dlg":3.0,"sel":3.0,"ord":3.0,"rev":1820.0,"undone":0.0},{"Дата":"2026-07-03","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-07-03","Канал":"Tg/Vb","inq":4.0,"dlg":4.0,"sel":4.0,"ord":1.0,"rev":450.0,"undone":3.0},{"Дата":"2026-07-03","Канал":"TikTok","inq":18.0,"dlg":18.0,"sel":8.0,"ord":0.0,"rev":0.0,"undone":8.0},{"Дата":"2026-07-03","Канал":"Сайт","inq":7.0,"dlg":6.0,"sel":6.0,"ord":6.0,"rev":15829.0,"undone":0.0},{"Дата":"2026-07-04","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-07-04","Канал":"Tg/Vb","inq":4.0,"dlg":4.0,"sel":4.0,"ord":2.0,"rev":4758.0,"undone":2.0},{"Дата":"2026-07-04","Канал":"TikTok","inq":15.0,"dlg":15.0,"sel":5.0,"ord":0.0,"rev":0.0,"undone":5.0},{"Дата":"2026-07-04","Канал":"Сайт","inq":2.0,"dlg":2.0,"sel":2.0,"ord":2.0,"rev":8760.0,"undone":0.0},{"Дата":"2026-07-06","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-07-06","Канал":"Tg/Vb","inq":3.0,"dlg":3.0,"sel":3.0,"ord":1.0,"rev":6360.0,"undone":2.0},{"Дата":"2026-07-06","Канал":"TikTok","inq":24.0,"dlg":24.0,"sel":8.0,"ord":0.0,"rev":0.0,"undone":8.0},{"Дата":"2026-07-06","Канал":"Сайт","inq":5.0,"dlg":5.0,"sel":5.0,"ord":4.0,"rev":5424.0,"undone":1.0},{"Дата":"2026-07-08","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-07-08","Канал":"Tg/Vb","inq":3.0,"dlg":3.0,"sel":3.0,"ord":2.0,"rev":3450.0,"undone":1.0},{"Дата":"2026-07-08","Канал":"TikTok","inq":27.0,"dlg":27.0,"sel":9.0,"ord":1.0,"rev":420.0,"undone":8.0},{"Дата":"2026-07-08","Канал":"Сайт","inq":11.0,"dlg":11.0,"sel":11.0,"ord":6.0,"rev":7770.0,"undone":5.0},{"Дата":"2026-07-09","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-07-09","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":1425.0,"undone":1.0},{"Дата":"2026-07-09","Канал":"TikTok","inq":10.0,"dlg":10.0,"sel":3.0,"ord":1.0,"rev":2000.0,"undone":2.0},{"Дата":"2026-07-09","Канал":"Сайт","inq":3.0,"dlg":3.0,"sel":3.0,"ord":3.0,"rev":14699.0,"undone":0.0},{"Дата":"2026-07-10","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-07-10","Канал":"Tg/Vb","inq":10.0,"dlg":10.0,"sel":10.0,"ord":6.0,"rev":12473.0,"undone":4.0},{"Дата":"2026-07-10","Канал":"TikTok","inq":21.0,"dlg":21.0,"sel":9.0,"ord":0.0,"rev":0.0,"undone":9.0},{"Дата":"2026-07-10","Канал":"Сайт","inq":5.0,"dlg":5.0,"sel":5.0,"ord":5.0,"rev":4685.0,"undone":0.0},{"Дата":"2026-07-13","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-07-13","Канал":"Tg/Vb","inq":4.0,"dlg":4.0,"sel":2.0,"ord":2.0,"rev":4340.0,"undone":0.0},{"Дата":"2026-07-13","Канал":"TikTok","inq":20.0,"dlg":20.0,"sel":8.0,"ord":3.0,"rev":2280.0,"undone":5.0},{"Дата":"2026-07-13","Канал":"Сайт","inq":2.0,"dlg":2.0,"sel":1.0,"ord":1.0,"rev":500.0,"undone":0.0},{"Дата":"2026-07-14","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":1110.0,"undone":1.0},{"Дата":"2026-07-14","Канал":"Tg/Vb","inq":4.0,"dlg":4.0,"sel":4.0,"ord":3.0,"rev":5811.0,"undone":1.0},{"Дата":"2026-07-14","Канал":"TikTok","inq":22.0,"dlg":22.0,"sel":9.0,"ord":2.0,"rev":1600.0,"undone":7.0},{"Дата":"2026-07-14","Канал":"Сайт","inq":4.0,"dlg":4.0,"sel":4.0,"ord":3.0,"rev":4390.0,"undone":1.0},{"Дата":"2026-07-15","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-07-15","Канал":"Tg/Vb","inq":5.0,"dlg":5.0,"sel":5.0,"ord":3.0,"rev":20409.0,"undone":2.0},{"Дата":"2026-07-15","Канал":"TikTok","inq":16.0,"dlg":16.0,"sel":6.0,"ord":0.0,"rev":0.0,"undone":6.0},{"Дата":"2026-07-15","Канал":"Сайт","inq":7.0,"dlg":7.0,"sel":7.0,"ord":6.0,"rev":9300.0,"undone":1.0},{"Дата":"2026-07-16","Канал":"Instagram","inq":5.0,"dlg":5.0,"sel":4.0,"ord":1.0,"rev":1630.0,"undone":3.0},{"Дата":"2026-07-16","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-07-16","Канал":"TikTok","inq":13.0,"dlg":13.0,"sel":6.0,"ord":0.0,"rev":0.0,"undone":6.0},{"Дата":"2026-07-16","Канал":"Сайт","inq":8.0,"dlg":8.0,"sel":7.0,"ord":7.0,"rev":20159.0,"undone":0.0},{"Дата":"2026-07-17","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":3000.0,"undone":1.0},{"Дата":"2026-07-17","Канал":"Tg/Vb","inq":3.0,"dlg":3.0,"sel":2.0,"ord":2.0,"rev":1510.0,"undone":0.0},{"Дата":"2026-07-17","Канал":"TikTok","inq":17.0,"dlg":17.0,"sel":8.0,"ord":1.0,"rev":750.0,"undone":7.0},{"Дата":"2026-07-17","Канал":"Сайт","inq":5.0,"dlg":5.0,"sel":5.0,"ord":5.0,"rev":12055.0,"undone":0.0},{"Дата":"2026-07-18","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":0.0,"rev":0.0,"undone":1.0},{"Дата":"2026-07-18","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":1899.0,"undone":1.0},{"Дата":"2026-07-18","Канал":"TikTok","inq":10.0,"dlg":10.0,"sel":3.0,"ord":0.0,"rev":0.0,"undone":3.0},{"Дата":"2026-07-18","Канал":"Сайт","inq":7.0,"dlg":7.0,"sel":7.0,"ord":7.0,"rev":15044.0,"undone":0.0},{"Дата":"2026-07-20","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-07-20","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-07-20","Канал":"TikTok","inq":23.0,"dlg":23.0,"sel":9.0,"ord":1.0,"rev":2000.0,"undone":8.0},{"Дата":"2026-07-20","Канал":"Сайт","inq":2.0,"dlg":2.0,"sel":2.0,"ord":2.0,"rev":4000.0,"undone":0.0},{"Дата":"2026-07-21","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-07-21","Канал":"Tg/Vb","inq":3.0,"dlg":3.0,"sel":3.0,"ord":1.0,"rev":1250.0,"undone":2.0},{"Дата":"2026-07-21","Канал":"TikTok","inq":22.0,"dlg":22.0,"sel":8.0,"ord":0.0,"rev":0.0,"undone":8.0},{"Дата":"2026-07-21","Канал":"Сайт","inq":9.0,"dlg":9.0,"sel":9.0,"ord":7.0,"rev":5636.0,"undone":2.0},{"Дата":"2026-07-22","Канал":"Instagram","inq":2.0,"dlg":2.0,"sel":2.0,"ord":1.0,"rev":1650.0,"undone":1.0},{"Дата":"2026-07-22","Канал":"Tg/Vb","inq":2.0,"dlg":2.0,"sel":2.0,"ord":0.0,"rev":0.0,"undone":2.0},{"Дата":"2026-07-22","Канал":"TikTok","inq":20.0,"dlg":20.0,"sel":8.0,"ord":0.0,"rev":0.0,"undone":8.0},{"Дата":"2026-07-22","Канал":"Сайт","inq":6.0,"dlg":6.0,"sel":6.0,"ord":4.0,"rev":4480.0,"undone":2.0},{"Дата":"2026-07-23","Канал":"Instagram","inq":1.0,"dlg":1.0,"sel":1.0,"ord":1.0,"rev":1770.0,"undone":0.0},{"Дата":"2026-07-23","Канал":"Tg/Vb","inq":4.0,"dlg":4.0,"sel":4.0,"ord":2.0,"rev":900.0,"undone":2.0},{"Дата":"2026-07-23","Канал":"TikTok","inq":23.0,"dlg":23.0,"sel":8.0,"ord":0.0,"rev":0.0,"undone":8.0},{"Дата":"2026-07-23","Канал":"Сайт","inq":4.0,"dlg":4.0,"sel":4.0,"ord":3.0,"rev":5315.0,"undone":1.0},{"Дата":"2026-07-24","Канал":"Instagram","inq":0.0,"dlg":0.0,"sel":0.0,"ord":0.0,"rev":0.0,"undone":0.0},{"Дата":"2026-07-24","Канал":"Tg/Vb","inq":3.0,"dlg":3.0,"sel":3.0,"ord":1.0,"rev":6000.0,"undone":2.0},{"Дата":"2026-07-24","Канал":"TikTok","inq":24.0,"dlg":24.0,"sel":5.0,"ord":1.0,"rev":450.0,"undone":4.0},{"Дата":"2026-07-24","Канал":"Сайт","inq":4.0,"dlg":4.0,"sel":4.0,"ord":3.0,"rev":2020.0,"undone":1.0}];
+const CH_COLORS = {'Сайт':'#3ecf8e','Tg/Vb':'#7c8bff','TikTok':'#ff6fae','Instagram':'#ffb454'};
+const CH_ORDER = ['Сайт','Tg/Vb','TikTok','Instagram'];
+let activeCh='all';
+const fmt=n=>Math.round(n).toLocaleString('uk-UA');
+const pct=n=>(isFinite(n)?n.toFixed(1):'0.0')+'%';
+const SVGNS='http://www.w3.org/2000/svg';
+function fmtD(s){const[y,m,d]=s.split('-');return `${d}.${m}.${y}`;}
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+const allDates=DATA.map(r=>r['Дата']).sort();
+const minD=allDates[0],maxD=allDates[allDates.length-1];
+document.getElementById('dFrom').value=minD;
+document.getElementById('dTo').value=maxD;
+document.getElementById('periodLabel').textContent=`Період ${fmtD(minD)} – ${fmtD(maxD)} · менеджер Влад · воронка продажів по каналах`;
+
+function filtered(){
+  const f=document.getElementById('dFrom').value,t=document.getElementById('dTo').value;
+  return DATA.filter(r=>(activeCh==='all'||r['Канал']===activeCh)&&r['Дата']>=f&&r['Дата']<=t);
+}
+function inRange(r){const f=document.getElementById('dFrom').value,t=document.getElementById('dTo').value;return r['Дата']>=f&&r['Дата']<=t;}
+function sum(a,k){return a.reduce((s,r)=>s+r[k],0);}
+function byChannel(rows){
+  const m={};
+  rows.forEach(r=>{const c=r['Канал'];(m[c]=m[c]||{inq:0,dlg:0,sel:0,ord:0,rev:0});['inq','dlg','sel','ord','rev'].forEach(k=>m[c][k]+=r[k]);});
+  return CH_ORDER.filter(c=>m[c]).map(c=>({ch:c,...m[c]}));
+}
+
+/* ---------- SVG chart helpers ---------- */
+function niceMax(v){if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v)));const n=v/p;let m;if(n<=1)m=1;else if(n<=2)m=2;else if(n<=2.5)m=2.5;else if(n<=5)m=5;else m=10;return m*p;}
+
+function barChart(el,labels,values,colors,valFmt){
+  const W=520,H=300,pl=52,pr=14,pt=14,pb=54;
+  const iw=W-pl-pr,ih=H-pt-pb;
+  const mx=niceMax(Math.max(...values,1));
+  const bw=iw/labels.length*0.6, gap=iw/labels.length;
+  let s=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">`;
+  for(let i=0;i<=4;i++){const y=pt+ih-ih*i/4;const val=mx*i/4;
+    s+=`<line class="gline" x1="${pl}" y1="${y}" x2="${W-pr}" y2="${y}"/>`;
+    s+=`<text class="tick" x="${pl-6}" y="${y+4}" text-anchor="end">${fmt(val)}</text>`;}
+  labels.forEach((lb,i)=>{
+    const h=ih*values[i]/mx;const x=pl+gap*i+(gap-bw)/2;const y=pt+ih-h;
+    s+=`<rect x="${x}" y="${y}" width="${bw}" height="${Math.max(0,h)}" rx="5" fill="${colors[i]}"/>`;
+    s+=`<text class="blab" x="${x+bw/2}" y="${y-6}" text-anchor="middle">${valFmt(values[i])}</text>`;
+    s+=`<text class="tick" x="${x+bw/2}" y="${H-pb+18}" text-anchor="middle">${esc(lb)}</text>`;
+  });
+  s+='</svg>';el.innerHTML=s;
+}
+
+function donut(el,labels,values,colors){
+  const W=300,H=260,cx=150,cy=120,r=88,rin=52;
+  const tot=values.reduce((a,b)=>a+b,0)||1;let ang=-Math.PI/2;
+  let s=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">`;
+  values.forEach((v,i)=>{
+    const a2=ang+2*Math.PI*v/tot;
+    const x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang),x2=cx+r*Math.cos(a2),y2=cy+r*Math.sin(a2);
+    const xi1=cx+rin*Math.cos(a2),yi1=cy+rin*Math.sin(a2),xi2=cx+rin*Math.cos(ang),yi2=cy+rin*Math.sin(ang);
+    const large=(a2-ang)>Math.PI?1:0;
+    if(v>0)s+=`<path d="M${x1} ${y1} A${r} ${r} 0 ${large} 1 ${x2} ${y2} L${xi1} ${yi1} A${rin} ${rin} 0 ${large} 0 ${xi2} ${yi2} Z" fill="${colors[i]}"/>`;
+    const mid=(ang+a2)/2,pctv=100*v/tot;
+    if(pctv>=6){const lr=(r+rin)/2;s+=`<text x="${cx+lr*Math.cos(mid)}" y="${cy+lr*Math.sin(mid)+4}" text-anchor="middle" style="fill:#fff;font-size:12px;font-weight:700">${pctv.toFixed(0)}%</text>`;}
+    ang=a2;
+  });
+  s+=`<text x="${cx}" y="${cy+4}" text-anchor="middle" style="fill:var(--muted);font-size:12px">виручка</text>`;
+  s+='</svg>';
+  s+=`<div class="legend">`+labels.map((l,i)=>`<span><span class="dot" style="background:${colors[i]}"></span>${esc(l)}</span>`).join('')+`</div>`;
+  el.innerHTML=s;
+}
+
+/* combo: bars (revenue) + lines (counts), dual axis */
+function comboChart(el,labels,bars,lines){
+  const W=1120,H=320,pl=58,pr=48,pt=16,pb=64;
+  const iw=W-pl-pr,ih=H-pt-pb;
+  const mxB=niceMax(Math.max(...bars,1));
+  const allLine=lines.flatMap(l=>l.values);const mxL=niceMax(Math.max(...allLine,1));
+  const gap=iw/labels.length, bw=Math.min(28,gap*0.55);
+  let s=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">`;
+  for(let i=0;i<=4;i++){const y=pt+ih-ih*i/4;
+    s+=`<line class="gline" x1="${pl}" y1="${y}" x2="${W-pr}" y2="${y}"/>`;
+    s+=`<text class="tick" x="${pl-6}" y="${y+4}" text-anchor="end">${fmt(mxB*i/4)}</text>`;
+    s+=`<text class="tick" x="${W-pr+6}" y="${y+4}" text-anchor="start">${fmt(mxL*i/4)}</text>`;}
+  s+=`<text class="tick" x="${pl-6}" y="${pt-2}" text-anchor="end">грн</text>`;
+  s+=`<text class="tick" x="${W-pr+6}" y="${pt-2}" text-anchor="start">шт</text>`;
+  // bars
+  labels.forEach((lb,i)=>{
+    const h=ih*bars[i]/mxB;const x=pl+gap*i+gap/2-bw/2;const y=pt+ih-h;
+    s+=`<rect x="${x}" y="${y}" width="${bw}" height="${Math.max(0,h)}" rx="3" fill="rgba(124,139,255,.55)"/>`;
+  });
+  // x labels (thin out)
+  const step=Math.ceil(labels.length/18);
+  labels.forEach((lb,i)=>{if(i%step===0){const x=pl+gap*i+gap/2;s+=`<text class="tick" x="${x}" y="${H-pb+16}" text-anchor="end" transform="rotate(-45 ${x} ${H-pb+16})">${esc(lb)}</text>`;}});
+  // lines
+  lines.forEach(ln=>{
+    let d='';labels.forEach((lb,i)=>{const x=pl+gap*i+gap/2;const y=pt+ih-ih*ln.values[i]/mxL;d+=(i===0?'M':'L')+x+' '+y+' ';});
+    s+=`<path d="${d}" fill="none" stroke="${ln.color}" stroke-width="2.5"/>`;
+    labels.forEach((lb,i)=>{const x=pl+gap*i+gap/2;const y=pt+ih-ih*ln.values[i]/mxL;s+=`<circle cx="${x}" cy="${y}" r="2.5" fill="${ln.color}"/>`;});
+  });
+  s+='</svg>';
+  s+=`<div class="legend"><span><span class="dot" style="background:rgba(124,139,255,.8)"></span>Виручка, грн</span>`+
+     lines.map(l=>`<span><span class="dot" style="background:${l.color}"></span>${esc(l.label)}</span>`).join('')+`</div>`;
+  el.innerHTML=s;
+}
+
+function weekKey(d){const dt=new Date(d);const day=(dt.getDay()+6)%7;const mon=new Date(dt);mon.setDate(dt.getDate()-day);return mon.toISOString().slice(0,10);}
+
+function render(){
+  const rows=filtered();
+  const inq=sum(rows,'inq'),dlg=sum(rows,'dlg'),sel=sum(rows,'sel'),ord=sum(rows,'ord'),rev=sum(rows,'rev');
+  const crIO=inq?100*ord/inq:0,check=ord?rev/ord:0;
+  const kpis=[['Звернення',fmt(inq),''],['Діалоги',fmt(dlg),''],['Підбори',fmt(sel),''],['Замовлення',fmt(ord),''],
+    ['Виручка',fmt(rev),' грн'],['Середній чек',fmt(check),' грн'],['CR звернення→замовлення',pct(crIO),'']];
+  document.getElementById('kpis').innerHTML=kpis.map(k=>`<div class="kpi"><div class="lab">${k[0]}</div><div class="val">${k[1]}<small>${k[2]}</small></div></div>`).join('');
+
+  const stages=[['Звернення',inq],['Діалоги',dlg],['Підбори',sel],['Замовлення',ord]];const mx=inq||1;
+  document.getElementById('funnel').innerHTML=stages.map((st,i)=>{
+    const w=Math.max(6,100*st[1]/mx);const conv=i>0?pct(stages[i-1][1]?100*st[1]/stages[i-1][1]:0):'';
+    return `<div class="stage"><div class="fbar" style="width:${w}%">${st[0]}: ${fmt(st[1])}</div><div class="fmeta">${conv?'▼ '+conv+' від попер.':''}</div></div>`;
+  }).join('');
+
+  const chAll=byChannel(DATA.filter(inRange));
+  const labels=chAll.map(c=>c.ch),cols=chAll.map(c=>CH_COLORS[c.ch]);
+  barChart(document.getElementById('revChart'),labels,chAll.map(c=>c.rev),cols,v=>fmt(v));
+  barChart(document.getElementById('crChart'),labels,chAll.map(c=>c.inq?+(100*c.ord/c.inq).toFixed(1):0),cols,v=>v+'%');
+  donut(document.getElementById('shareChart'),labels,chAll.map(c=>c.rev),cols);
+  barChart(document.getElementById('checkChart'),labels,chAll.map(c=>c.ord?Math.round(c.rev/c.ord):0),cols,v=>fmt(v));
+
+  // weekly
+  const wk={};rows.forEach(r=>{const w=weekKey(r['Дата']);(wk[w]=wk[w]||{inq:0,ord:0,rev:0});wk[w].inq+=r.inq;wk[w].ord+=r.ord;wk[w].rev+=r.rev;});
+  const wkeys=Object.keys(wk).sort();
+  comboChart(document.getElementById('weekChart'),wkeys.map(fmtD),wkeys.map(k=>wk[k].rev),
+    [{label:'Замовлення',color:'#3ecf8e',values:wkeys.map(k=>wk[k].ord)},{label:'Звернення',color:'#ff6fae',values:wkeys.map(k=>wk[k].inq)}]);
+
+  // daily
+  const dd={};rows.forEach(r=>{const d=r['Дата'];(dd[d]=dd[d]||{inq:0,ord:0,rev:0});dd[d].inq+=r.inq;dd[d].ord+=r.ord;dd[d].rev+=r.rev;});
+  const dkeys=Object.keys(dd).sort();
+  comboChart(document.getElementById('dayChart'),dkeys.map(fmtD),dkeys.map(k=>dd[k].rev),
+    [{label:'Звернення',color:'#ff6fae',values:dkeys.map(k=>dd[k].inq)},{label:'Замовлення',color:'#3ecf8e',values:dkeys.map(k=>dd[k].ord)}]);
+
+  // table
+  const tot=chAll.reduce((a,c)=>({inq:a.inq+c.inq,dlg:a.dlg+c.dlg,sel:a.sel+c.sel,ord:a.ord+c.ord,rev:a.rev+c.rev}),{inq:0,dlg:0,sel:0,ord:0,rev:0});
+  let html=`<thead><tr><th>Канал</th><th>Звернення</th><th>Діалоги</th><th>Підбори</th><th>Замовлення</th><th>CR зв.→зам.</th><th>Виручка</th><th>Частка</th><th>Серед. чек</th></tr></thead><tbody>`;
+  chAll.forEach(c=>{html+=`<tr><td><span class="dot" style="background:${CH_COLORS[c.ch]}"></span>${c.ch}</td><td>${fmt(c.inq)}</td><td>${fmt(c.dlg)}</td><td>${fmt(c.sel)}</td><td>${fmt(c.ord)}</td><td>${pct(c.inq?100*c.ord/c.inq:0)}</td><td>${fmt(c.rev)}</td><td>${pct(tot.rev?100*c.rev/tot.rev:0)}</td><td>${fmt(c.ord?c.rev/c.ord:0)}</td></tr>`;});
+  html+=`<tr style="font-weight:700;border-top:2px solid var(--accent)"><td>Разом</td><td>${fmt(tot.inq)}</td><td>${fmt(tot.dlg)}</td><td>${fmt(tot.sel)}</td><td>${fmt(tot.ord)}</td><td>${pct(tot.inq?100*tot.ord/tot.inq:0)}</td><td>${fmt(tot.rev)}</td><td>100%</td><td>${fmt(tot.ord?tot.rev/tot.ord:0)}</td></tr></tbody>`;
+  document.getElementById('chTable').innerHTML=html;
+}
+
+(function(){
+  const ch=byChannel(DATA);
+  const tot=ch.reduce((a,c)=>({ord:a.ord+c.ord,rev:a.rev+c.rev,inq:a.inq+c.inq}),{ord:0,rev:0,inq:0});
+  const site=ch.find(c=>c.ch==='Сайт'),tg=ch.find(c=>c.ch==='Tg/Vb'),tt=ch.find(c=>c.ch==='TikTok'),ig=ch.find(c=>c.ch==='Instagram');
+  const items=[
+    `<b>Сайт + Tg/Vb = ${pct(100*(site.rev+tg.rev)/tot.rev)} усієї виручки.</b> Це ядро відділу: висока конверсія (Сайт ${pct(100*site.ord/site.inq)}, Tg/Vb ${pct(100*tg.ord/tg.inq)}) при малому обсязі звернень.`,
+    `<b>TikTok — головний генератор трафіку (${fmt(tt.inq)} звернень, ${pct(100*tt.inq/tot.inq)} усіх), але конверсія лише ${pct(100*tt.ord/tt.inq)}.</b> Багато порожніх діалогів: підбори роблять, а до замовлення доходить кожен ~${Math.round(tt.sel/tt.ord)}-й. Тут найбільший потенціал росту.`,
+    `<b>Instagram майже не працює:</b> ${fmt(ig.inq)} звернень за весь період, ${fmt(ig.ord)} замовлень, ${pct(100*ig.rev/tot.rev)} виручки. Або підсилювати, або не витрачати ресурс.`,
+    `<b>Загальна воронка:</b> зі ${fmt(tot.inq)} звернень — ${fmt(tot.ord)} замовлень (${pct(100*tot.ord/tot.inq)}). Найбільша втрата — на етапі підбір→замовлення у TikTok/Instagram.`
+  ];
+  document.getElementById('insights').innerHTML=items.map(t=>`<div class="insight">${t}</div>`).join('');
+})();
+
+document.querySelectorAll('.chip[data-ch]').forEach(el=>el.addEventListener('click',()=>{
+  document.querySelectorAll('.chip[data-ch]').forEach(x=>x.classList.remove('on'));el.classList.add('on');activeCh=el.dataset.ch;render();}));
+document.getElementById('dFrom').addEventListener('change',render);
+document.getElementById('dTo').addEventListener('change',render);
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  document.getElementById('dFrom').value=minD;document.getElementById('dTo').value=maxD;
+  document.querySelectorAll('.chip[data-ch]').forEach(x=>x.classList.remove('on'));
+  document.querySelector('.chip[data-ch="all"]').classList.add('on');activeCh='all';render();});
+render();
+window.addEventListener('resize',render);
+
+/* ---------- Порівняння двох періодів ---------- */
+function initCompare(){
+  const months=[...new Set(DATA.map(r=>r['Дата'].slice(0,7)))].sort();
+  const MN={'01':'Січень','02':'Лютий','03':'Березень','04':'Квітень','05':'Травень','06':'Червень','07':'Липень','08':'Серпень','09':'Вересень','10':'Жовтень','11':'Листопад','12':'Грудень'};
+  const monthLabel=m=>{const[y,mm]=m.split('-');return MN[mm]+' '+y;};
+  let mode='month', norm='total';
+  const controls=document.getElementById('cmpControls');
+  function monthRange(m){const ds=DATA.filter(r=>r['Дата'].slice(0,7)===m).map(r=>r['Дата']).sort();return[ds[0],ds[ds.length-1]];}
+  const defA=months[months.length-2]||months[0], defB=months[months.length-1];
+
+  function buildControls(){
+    if(mode==='month'){
+      const opts=months.map(m=>`<option value="${m}">${monthLabel(m)}</option>`).join('');
+      controls.innerHTML=`<div class="cmp-col"><span class="tag tagA">Період A</span><select id="cmpA">${opts}</select></div>
+        <div class="cmp-col"><span class="tag tagB">Період B</span><select id="cmpB">${opts}</select></div>`;
+      document.getElementById('cmpA').value=defA;document.getElementById('cmpB').value=defB;
+    }else{
+      const a=monthRange(defA),b=monthRange(defB);
+      controls.innerHTML=`<div class="cmp-col"><span class="tag tagA">Період A</span><div><input type="date" id="cmpAf"> — <input type="date" id="cmpAt"></div></div>
+        <div class="cmp-col"><span class="tag tagB">Період B</span><div><input type="date" id="cmpBf"> — <input type="date" id="cmpBt"></div></div>`;
+      document.getElementById('cmpAf').value=a[0];document.getElementById('cmpAt').value=a[1];
+      document.getElementById('cmpBf').value=b[0];document.getElementById('cmpBt').value=b[1];
+    }
+    controls.querySelectorAll('select,input').forEach(el=>el.addEventListener('change',renderCompare));
+    renderCompare();
+  }
+  function rowsFor(w){
+    if(mode==='month'){const m=document.getElementById(w==='A'?'cmpA':'cmpB').value;
+      const rows=DATA.filter(r=>r['Дата'].slice(0,7)===m);return{rows,label:monthLabel(m)};}
+    const f=document.getElementById(w==='A'?'cmpAf':'cmpBf').value,t=document.getElementById(w==='A'?'cmpAt':'cmpBt').value;
+    return{rows:DATA.filter(r=>r['Дата']>=f&&r['Дата']<=t),label:fmtD(f)+' – '+fmtD(t)};
+  }
+  function agg(rows){const o={inq:0,dlg:0,sel:0,ord:0,rev:0};rows.forEach(r=>['inq','dlg','sel','ord','rev'].forEach(k=>o[k]+=r[k]));
+    o.check=o.ord?o.rev/o.ord:0;o.cr=o.inq?100*o.ord/o.inq:0;o.days=new Set(rows.map(r=>r['Дата'])).size;return o;}
+  function metricCard(lab,a,b,kind,dec){
+    let av,bv,dtxt,cls;
+    if(kind==='cr'){av=pct(a);bv=pct(b);const d=b-a;cls=d>0.05?'up':d<-0.05?'down':'flat';dtxt=(d>=0?'▲ +':'▼ ')+d.toFixed(1)+' п.п.';}
+    else{const f=v=>dec?v.toLocaleString('uk-UA',{minimumFractionDigits:1,maximumFractionDigits:1}):fmt(v);
+      av=f(a);bv=f(b);const d=a?100*(b-a)/a:(b>0?100:0);cls=d>0.05?'up':d<-0.05?'down':'flat';const arr=d>0.05?'▲ ':d<-0.05?'▼ ':'▬ ';dtxt=arr+(d>=0?'+':'')+d.toFixed(1)+'%';}
+    return `<div class="cmp-metric"><div class="lab">${lab}</div><div class="ab"><span class="a">A: ${av}</span><span class="b">B: ${bv}</span></div><div class="delta ${cls}">${dtxt}</div></div>`;
+  }
+  function renderCompare(){
+    const A=rowsFor('A'),B=rowsFor('B');const a=agg(A.rows),b=agg(B.rows);
+    const perDay=norm==='day';const pA=perDay?(a.days||1):1,pB=perDay?(b.days||1):1;
+    const sfx=perDay?' / день':'';
+    document.getElementById('cmpNote').innerHTML=
+      `<span style="color:#7c8bff;font-weight:600">A · ${A.label}</span> — ${a.days} дн. &nbsp;|&nbsp; <span style="color:#ff6fae;font-weight:600">B · ${B.label}</span> — ${b.days} дн.`+
+      (perDay?` &nbsp;✅ показано в середньому за день — періоди зіставні незалежно від довжини`
+             :(a.days!==b.days?` &nbsp;⚠️ різна к-сть днів — увімкни «У середньому за день» для чесного порівняння`:''));
+    const M=[
+      ['Звернення'+sfx, a.inq/pA, b.inq/pB,'n',perDay],
+      ['Діалоги'+sfx, a.dlg/pA, b.dlg/pB,'n',perDay],
+      ['Підбори'+sfx, a.sel/pA, b.sel/pB,'n',perDay],
+      ['Замовлення'+sfx, a.ord/pA, b.ord/pB,'n',perDay],
+      ['Виручка, грн'+sfx, a.rev/pA, b.rev/pB,'n',perDay],
+      ['Середній чек, грн', a.check, b.check,'n',false],
+      ['CR звернення→замовлення', a.cr, b.cr,'cr',false]];
+    document.getElementById('cmpMetrics').innerHTML=M.map(m=>metricCard(m[0],m[1],m[2],m[3],m[4])).join('');
+    const chA={},chB={};
+    A.rows.forEach(r=>{(chA[r['Канал']]=chA[r['Канал']]||{ord:0,inq:0,rev:0});chA[r['Канал']].ord+=r.ord;chA[r['Канал']].inq+=r.inq;chA[r['Канал']].rev+=r.rev;});
+    B.rows.forEach(r=>{(chB[r['Канал']]=chB[r['Канал']]||{ord:0,inq:0,rev:0});chB[r['Канал']].ord+=r.ord;chB[r['Канал']].inq+=r.inq;chB[r['Канал']].rev+=r.rev;});
+    let h=`<thead><tr><th>Канал</th><th>Виручка A${sfx}</th><th>Виручка B${sfx}</th><th>Δ виручки</th><th>CR A</th><th>CR B</th><th>Δ CR</th></tr></thead><tbody>`;
+    CH_ORDER.forEach(c=>{const x=chA[c]||{ord:0,inq:0,rev:0},y=chB[c]||{ord:0,inq:0,rev:0};
+      const crA=x.inq?100*x.ord/x.inq:0,crB=y.inq?100*y.ord/y.inq:0;
+      const rvA=x.rev/pA,rvB=y.rev/pB;
+      const dRev=rvA?100*(rvB-rvA)/rvA:(rvB>0?100:0);const dCr=crB-crA;
+      h+=`<tr><td><span class="dot" style="background:${CH_COLORS[c]}"></span>${c}</td>
+        <td>${fmt(rvA)}</td><td>${fmt(rvB)}</td><td class="${dRev>0.05?'up':dRev<-0.05?'down':''}">${(dRev>=0?'+':'')+dRev.toFixed(1)}%</td>
+        <td>${pct(crA)}</td><td>${pct(crB)}</td><td class="${dCr>0.05?'up':dCr<-0.05?'down':''}">${(dCr>=0?'+':'')+dCr.toFixed(1)} п.п.</td></tr>`;});
+    h+='</tbody>';document.getElementById('cmpTable').innerHTML=h;
+  }
+  document.querySelectorAll('.chip[data-mode]').forEach(el=>el.addEventListener('click',()=>{
+    document.querySelectorAll('.chip[data-mode]').forEach(x=>x.classList.remove('on'));el.classList.add('on');mode=el.dataset.mode;buildControls();}));
+  document.querySelectorAll('.chip[data-norm]').forEach(el=>el.addEventListener('click',()=>{
+    document.querySelectorAll('.chip[data-norm]').forEach(x=>x.classList.remove('on'));el.classList.add('on');norm=el.dataset.norm;renderCompare();}));
+  buildControls();
+}
+initCompare();
+</script>
+</body>
+</html>
