@@ -9,6 +9,7 @@
   --bg:#0f1120; --panel:#191c33; --panel2:#20243f; --line:#2c3154;
   --txt:#eef0ff; --muted:#9aa0c4; --accent:#ff6fae; --accent2:#7c8bff;
   --c-site:#3ecf8e; --c-tg:#7c8bff; --c-tt:#ff6fae; --c-ig:#ffb454;
+  --ok:#3ecf8e; --warn:#ffb454; --bad:#ff6b6b; --up:#3ecf8e; --down:#ff6b6b;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt);padding:22px;line-height:1.4}
@@ -71,6 +72,10 @@ svg{width:100%;height:auto;display:block;overflow:visible}
 .banner{padding:11px 15px;border-radius:11px;font-size:13px;margin:16px 0}
 .banner.load{background:#1a1f3d;border:1px solid #2c3154;color:#9aa0c4}
 .banner.err{background:#3a1a26;border:1px solid #6b2438;color:#ffb3c4}
+.mi{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--accent2);border-radius:10px;padding:11px 14px;font-size:13.5px;margin-bottom:9px;line-height:1.5}
+.mq{background:linear-gradient(135deg,#2a1e3d,#1c2140);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:11px 14px;font-size:13.5px;margin-bottom:8px}
+.mq b{color:var(--accent)}
+.qhead{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;font-weight:700}
 </style>
 </head>
 <body>
@@ -112,6 +117,9 @@ svg{width:100%;height:auto;display:block;overflow:visible}
     <div class="cmp-metrics" id="monthMetrics"></div>
     <h2 style="margin-top:20px">По каналах</h2>
     <table id="monthTable"></table>
+    <h2 style="margin-top:22px">🧠 Висновки місяця</h2>
+    <div id="monthInsights"></div>
+    <div id="monthQuestions" style="margin-top:14px"></div>
   </div>
 
   <div class="card full" id="cmpCard" style="margin-bottom:16px">
@@ -447,6 +455,103 @@ function renderMonth(){
     h+='<tr><td><span class="dot" style="background:'+CH_COLORS[c]+'"></span>'+c+'</td><td>'+fmt(y.rev)+'</td><td>'+pct(100*y.rev/totB)+'</td>'+
        '<td class="'+(A.length?r[1]:'')+'">'+(A.length?r[0]:'—')+'</td><td>'+fmt(y.ord)+'</td><td>'+pct(cr)+'</td><td>'+fmt(y.ord?y.rev/y.ord:0)+'</td></tr>';});
   document.getElementById('monthTable').innerHTML=h+'</tbody>';
+
+  const ins=buildMonthInsights(m,pm,B,A);
+  document.getElementById('monthInsights').innerHTML=ins.out.map(x=>'<div class="mi">'+x+'</div>').join('');
+  document.getElementById('monthQuestions').innerHTML=
+    '<div class="qhead">❓ Питання для розбору з командою</div>'+
+    ins.qs.map((x,i)=>'<div class="mq"><b>'+(i+1)+'.</b> '+x+'</div>').join('');
+}
+
+function buildMonthInsights(m, pm, B, A){
+  const b=mAgg(B), a=mAgg(A);
+  const dB=b.days||1, dA=a.days||1;
+  const cA={}, cB={};
+  A.forEach(r=>{(cA[r['Канал']]=cA[r['Канал']]||{inq:0,dlg:0,sel:0,ord:0,rev:0});['inq','dlg','sel','ord','rev'].forEach(k=>cA[r['Канал']][k]+=r[k]);});
+  B.forEach(r=>{(cB[r['Канал']]=cB[r['Канал']]||{inq:0,dlg:0,sel:0,ord:0,rev:0});['inq','dlg','sel','ord','rev'].forEach(k=>cB[r['Канал']][k]+=r[k]);});
+  const totRev=Object.values(cB).reduce((s,v)=>s+v.rev,0)||1;
+  const out=[], qs=[];
+
+  // 1. План
+  if(GOALS.revenue_total){
+    const p=100*b.rev/GOALS.revenue_total, gap=GOALS.revenue_total-b.rev;
+    const paceNow=b.rev/dB, needPace=gap>0?GOALS.revenue_total/dB:0;
+    if(p>=100) out.push('✅ <b>План виконано на '+p.toFixed(0)+'%</b> ('+fmt(b.rev)+' грн). Темп: '+fmt(paceNow)+' грн/день.');
+    else out.push('🔴 <b>План виконано на '+p.toFixed(0)+'%</b> — недобір <b>'+fmt(gap)+' грн</b>. Поточний темп '+fmt(paceNow)+' грн/день, а для плану треба ~'+fmt(needPace)+' грн/день (+'+fmt(needPace-paceNow)+').');
+  }
+
+  // 2. Хто робить гроші
+  const ranked=Object.entries(cB).sort((x,y)=>y[1].rev-x[1].rev);
+  if(ranked.length){
+    const [n1,v1]=ranked[0];
+    const cr1=v1.inq?100*v1.ord/v1.inq:0;
+    let s='💪 <b>Основний канал: '+n1+'</b> — '+fmt(v1.rev)+' грн ('+(100*v1.rev/totRev).toFixed(0)+'% виручки) при конверсії '+cr1.toFixed(1)+'%';
+    if(ranked.length>1){const [n2,v2]=ranked[1];s+='. Другий — '+n2+' ('+(100*v2.rev/totRev).toFixed(0)+'%). Разом вони дають '+(100*(v1.rev+v2.rev)/totRev).toFixed(0)+'% усіх грошей.';}
+    out.push(s);
+  }
+
+  // 3. Найбільше просів
+  let worst=null;
+  for(const [ch,y] of Object.entries(cB)){
+    const x=cA[ch]; if(!x||x.rev<=0)continue;
+    const d=100*(y.rev-x.rev)/x.rev;
+    if(!worst||d<worst.d) worst={ch,d,lost:x.rev-y.rev};
+  }
+  if(worst && worst.d<-10){
+    out.push('⚠️ <b>Найбільше просів: '+worst.ch+'</b> ('+worst.d.toFixed(0)+'%) — це мінус <b>'+fmt(worst.lost)+' грн</b> до попереднього місяця.');
+    qs.push('Що змінилося в <b>'+worst.ch+'</b>? Контент, аудиторія, наявність товару чи швидкість відповіді?');
+  }
+
+  // 4. Вузьке місце воронки
+  const st=[['звернення→діалог', b.inq?100*b.dlg/b.inq:0],['діалог→підбір', b.dlg?100*b.sel/b.dlg:0],['підбір→замовлення', b.sel?100*b.ord/b.sel:0]];
+  const weak=st.slice(1).sort((x,y)=>x[1]-y[1])[0];
+  const stA=[['звернення→діалог', a.inq?100*a.dlg/a.inq:0],['діалог→підбір', a.dlg?100*a.sel/a.dlg:0],['підбір→замовлення', a.sel?100*a.ord/a.sel:0]];
+  const weakPrev=stA.find(x=>x[0]===weak[0]);
+  let ws='🔎 <b>Вузьке місце воронки: '+weak[0]+'</b> — '+weak[1].toFixed(0)+'%';
+  if(weakPrev && weakPrev[1]>0) ws+=' (було '+weakPrev[1].toFixed(0)+'%)';
+  out.push(ws+'. Саме тут губиться найбільше клієнтів.');
+
+  // 5. Упущена вигода — орієнтир: власний найкращий місяць каналу
+  let miss=null;
+  const allMonths=[...new Set(DATA.map(r=>r['Дата'].slice(0,7)))];
+  for(const [ch,y] of Object.entries(cB)){
+    const cr=y.inq?100*y.ord/y.inq:0;
+    if(y.inq < b.inq*0.2) continue;
+    let bestCR=cr, bestM=m;
+    for(const mm2 of allMonths){
+      const g=DATA.filter(r=>r['Дата'].slice(0,7)===mm2 && r['Канал']===ch);
+      const gi=g.reduce((s,r)=>s+r.inq,0), go=g.reduce((s,r)=>s+r.ord,0);
+      if(gi>=20){const c2=100*go/gi; if(c2>bestCR){bestCR=c2;bestM=mm2;}}
+    }
+    if(bestCR>cr+0.5){
+      const chk=y.ord?y.rev/y.ord:(b.check||0);
+      const pot=y.inq*(bestCR-cr)/100*chk;
+      if(!miss||pot>miss.pot) miss={ch,cr,bestCR,bestM,pot,inq:y.inq,share:100*y.inq/(b.inq||1)};
+    }
+  }
+  if(miss && miss.pot>1000){
+    out.push('💸 <b>Упущена вигода: '+miss.ch+'</b> дає '+miss.share.toFixed(0)+'% усіх звернень ('+fmt(miss.inq)+'), але конвертує '+miss.cr.toFixed(1)+'% замість власних '+miss.bestCR.toFixed(1)+'% у '+mLabel(miss.bestM)+'. Повернути до свого ж рівня = <b>+'+fmt(miss.pot)+' грн/міс</b>.');
+    qs.push('<b>'+miss.ch+'</b>: це проблема якості трафіку (приходять не ті люди) чи обробки (не встигаємо/не дотискаємо)?');
+  }
+
+  // 6. Чек і конверсія — діагноз
+  const dChk=a.check?100*(b.check-a.check)/a.check:0, dCR=b.cr-a.cr;
+  if(A.length){
+    if(dChk<-10 && dCR<-2) out.push('🧭 Впали <b>і конверсія ('+dCR.toFixed(1)+' п.п.), і середній чек ('+dChk.toFixed(0)+'%)</b> — типова ознака зміни аудиторії: приходять люди з іншими очікуваннями по грошах, а не просто «менше купують».');
+    else if(dCR<-2 && dChk>=-10) out.push('🧭 Конверсія впала ('+dCR.toFixed(1)+' п.п.), але чек тримається — схоже на проблему <b>обробки</b>, а не аудиторії: ліди ті самі, але їх гірше дотискають.');
+    else if(dCR>2) out.push('🧭 Конверсія зросла на '+dCR.toFixed(1)+' п.п. — робота з лідами покращилась.');
+  }
+
+  // 7. Повнота даних
+  const [yy,mm]=m.split('-').map(Number);
+  const dim=new Date(yy,mm,0).getDate();
+  const daysSeen=new Set(B.map(r=>r['Дата'])).size;
+  const lastDay=Math.max(...B.map(r=>+r['Дата'].slice(8,10)));
+  if(lastDay<dim-1) out.push('📋 <b>Увага:</b> дані заповнено лише до '+String(lastDay).padStart(2,'0')+'.'+String(mm).padStart(2,'0')+' — місяць неповний, тому абсолютні суми занижені. Дивіться на показники «за день».');
+  else if(daysSeen<dim*0.6) out.push('📋 <b>Увага:</b> заповнено лише '+daysSeen+' днів із '+dim+' — порівнюйте за показниками «за день».');
+
+  qs.push('Який реалістичний темп ставимо на наступний місяць — і що конкретно робимо, щоб його тримати?');
+  return {out, qs};
 }
 
 /* ---------- Порівняння двох періодів ---------- */
