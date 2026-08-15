@@ -76,6 +76,26 @@ svg{width:100%;height:auto;display:block;overflow:visible}
 .mq{background:linear-gradient(135deg,#2a1e3d,#1c2140);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:11px 14px;font-size:13.5px;margin-bottom:8px}
 .mq b{color:var(--accent)}
 .qhead{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;font-weight:700}
+/* ---------- перемикач розділів ---------- */
+.viewsw{display:inline-flex;gap:5px;margin:18px 0 2px;padding:5px;background:var(--panel);border:1px solid var(--line);border-radius:13px}
+.viewsw .chip{border-color:transparent;background:transparent;padding:8px 18px;font-size:13.5px}
+.viewsw .chip:hover{border-color:var(--line)}
+.viewsw .chip.on{background:var(--accent);border-color:var(--accent);color:#1a0d18;font-weight:600}
+/* ---------- модуль «Товари інтернет-каналу» ---------- */
+.kpi .sub2{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.35}
+input[type=search]{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:13px;font-family:inherit;min-width:250px;max-width:100%}
+.card .toolbar{background:var(--panel2)}
+input[type=search]::placeholder{color:var(--muted)}
+input[type=search]:focus{outline:none;border-color:var(--accent2)}
+.ip-tw{overflow-x:auto}
+#ipT th:nth-child(2),#ipT td:nth-child(2),#ipT th:nth-child(3),#ipT td:nth-child(3){text-align:left}
+#ipT td:nth-child(2){color:var(--muted);font-size:12px;white-space:nowrap}
+#ipT td:nth-child(3){white-space:normal;min-width:260px}
+.ip-pill{display:inline-block;padding:2px 10px;border-radius:9px;font-size:12px;font-weight:600;border:1px solid transparent}
+.ip-pill.hi{background:rgba(124,139,255,.18);color:#a9b3ff;border-color:rgba(124,139,255,.38)}
+.ip-pill.lo{background:rgba(154,160,196,.12);color:var(--muted);border-color:var(--line)}
+.ip-lg{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--muted);align-items:center}
+.ip-empty{padding:22px;text-align:center;color:var(--muted);font-size:13px}
 </style>
 </head>
 <body>
@@ -85,6 +105,12 @@ svg{width:100%;height:auto;display:block;overflow:visible}
     <div class="sub" id="periodLabel">Воронка продажів по каналах · менеджер Влад</div>
   </div>
 
+  <div class="viewsw" id="viewSw">
+    <span class="chip on" data-view="ch">📊 Канали</span>
+    <span class="chip" data-view="pr">🧴 Товари</span>
+  </div>
+
+  <div id="chWrap">
   <div id="loadBanner" class="banner load">⏳ Завантажую свіжі дані з таблиці…</div>
 
   <div id="app" style="display:none">
@@ -178,6 +204,47 @@ svg{width:100%;height:auto;display:block;overflow:visible}
     <div id="insights"></div>
   </div>
 
+  </div>
+  </div><!-- /chWrap -->
+
+  <div id="appProd" style="display:none">
+    <div id="ipBanner" class="banner load">⏳ Завантажую товарні дані з 1С…</div>
+    <div id="ipRoot" style="display:none">
+      <div class="sub" id="ipPeriod" style="margin:16px 0 0"></div>
+      <div class="kpis" id="ipK"></div>
+
+      <div class="card full" style="margin-bottom:16px">
+        <h2>Топ-15 ароматів за виручкою</h2>
+        <div id="ipC1"></div>
+      </div>
+
+      <div class="card full" style="margin-bottom:16px">
+        <h2>Топ-12 брендів</h2>
+        <div id="ipC2"></div>
+      </div>
+
+      <div class="card full">
+        <h2>Усі позиції каналу</h2>
+        <div class="toolbar" style="margin:0 0 14px">
+          <div class="grp">
+            <label>Група:</label>
+            <span class="chip on" data-ipf="all">Усі</span>
+            <span class="chip" data-ipf="Розпив">Розпив</span>
+            <span class="chip" data-ipf="Косметика">Косметика</span>
+          </div>
+          <div class="grp" style="margin-left:auto">
+            <input type="search" id="ipQ" placeholder="Пошук аромату або бренду…">
+          </div>
+        </div>
+        <div class="ip-tw"><table id="ipT"></table></div>
+        <div class="ip-lg">
+          <span>грн/мл:</span>
+          <span><span class="ip-pill hi">≥ 300</span> преміум</span>
+          <span><span class="ip-pill lo">≤ 80</span> дешевий обсяг</span>
+          <span id="ipCount" style="margin-left:auto"></span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="foot" id="stamp">Завантаження…</div>
@@ -637,6 +704,117 @@ initCompare();
 }
 
 boot();
+
+/* ═══════════ МОДУЛЬ «ТОВАРИ ІНТЕРНЕТ-КАНАЛУ» (дані з 1С) ═══════════ */
+const IP_SNAPSHOT = {"period":"01.08.2026 - 31.08.2026","store":"Інтернет","tot":91380,"npos":68,"roz":89230,"rozq":559,"rozn":66,"cos":2150,"cosn":2,"avg_ml":160,"rows":[{"n":"Xerjoff CASAMORATI 1888 TEMPIO D'ACQUA 1мл (унісекс) Італія","b":"Xerjoff","g":"Розпив","v":9921,"q":56.0,"p":177},{"n":"Fragrance Du Bois LUCIUS MAXIMUS 1мл(унісекс) Франція","b":"Fragrance Du Bois","g":"Розпив","v":9117,"q":40.0,"p":228},{"n":"Clive Christian BLONDE AMBER 1мл (чол.) В.Британія","b":"Clive Christian","g":"Розпив","v":6600,"q":12.0,"p":550},{"n":"Louis Vuitton PACIFIC CHILL 1мл (унісекс)Франція","b":"Louis Vuitton","g":"Розпив","v":3124,"q":15.0,"p":208},{"n":"Filippo Sorcinelli RELIQVIA1мл (унісекс) Італія","b":"Filippo Sorcinelli","g":"Розпив","v":3019,"q":17.0,"p":178},{"n":"Fugazzi ANGEL DUST Extrait de Parfum 1мл (унісекс) Нідерланди","b":"Fugazzi","g":"Розпив","v":2780,"q":18.0,"p":154},{"n":"Amouage GUIDANCE46 1мл (унісекс) Оман","b":"Amouage","g":"Розпив","v":2400,"q":8.0,"p":300},{"n":"Roja ELYSIUM Pour Home edp 1мл (чол.) Англія","b":"Roja","g":"Розпив","v":2360,"q":21.0,"p":112},{"n":"Orto Parisi Parfum BERGAMASK 1мл (унісекс) Нідерланди","b":"Orto Parisi","g":"Розпив","v":2257,"q":11.0,"p":205},{"n":"Genyum PAINTER 1мл (унісекс) Іспанія","b":"Genyum","g":"Розпив","v":2250,"q":15.0,"p":150},{"n":"Orto Parisi Parfum MEGAMARE 1мл (унісекс) Нідерланди","b":"Orto Parisi","g":"Розпив","v":2200,"q":10.0,"p":220},{"n":"Amouage GUIDANCE 1мл (унісекс) Оман","b":"Amouage","g":"Розпив","v":2121,"q":11.0,"p":193},{"n":"Jean Paul Gaultier SCANDAL 1мл (жін.) Франція/Іспанія","b":"Jean Paul Gaultier","g":"Розпив","v":2030,"q":29.0,"p":70},{"n":"Fragrance Du Bois LUCIUS 1мл(унісекс) Франція","b":"Fragrance Du Bois","g":"Розпив","v":1969,"q":10.0,"p":197},{"n":"Ex Nihilo BLUE TALISMAN 1мл (унісекс) Франція","b":"Ex Nihilo","g":"Розпив","v":1882,"q":8.0,"p":235},{"n":"Roja ISOLA BLU 1мл (унісекс) Англія","b":"Roja","g":"Розпив","v":1850,"q":5.0,"p":370},{"n":"Fugazzi ORANGE CRUSH Extrait de Parfum 1мл (унісекс) Нідерланди","b":"Fugazzi","g":"Розпив","v":1700,"q":10.0,"p":170},{"n":"Sospiro Perfumes VIBRATO 1мл(унісекс)Франція","b":"Sospiro","g":"Розпив","v":1524,"q":8.0,"p":190},{"n":"Marc-Antoine Barrois GANYMEDE 1мл (унісекс) Франція","b":"Marc-Antoine Barrois","g":"Розпив","v":1451,"q":10.0,"p":145},{"n":"Juliette Has A Gun PEAR INC. 1мл (унісекс) Франція","b":"Juliette Has A Gun","g":"Розпив","v":1330,"q":19.0,"p":70},{"n":"Clive Christian MATSUKITA 1мл (унісекс.) В.Британія","b":"Clive Christian","g":"Розпив","v":1321,"q":3.0,"p":440},{"n":"Louis Vuitton FANTASMAGORY 1мл (унісекс)Франція","b":"Louis Vuitton","g":"Розпив","v":1303,"q":3.0,"p":434},{"n":"Тональна основа MARK WIRLEN Bamboo Beige Velvet SPF30 30мл 45681378","b":"Mark Wirlen","g":"Косметика","v":1300,"q":1.0,"p":1300},{"n":"Parfums De Marley VALAYA 1мл (жін) Франція","b":"Parfums De Marley","g":"Розпив","v":1216,"q":5.0,"p":243},{"n":"Roja ISOLA VERDE 1мл (унісекс) Англія","b":"Roja","g":"Розпив","v":1163,"q":3.0,"p":388},{"n":"Ex Nihilo THE HEDONIST 1мл (унісекс) Франція","b":"Ex Nihilo","g":"Розпив","v":1007,"q":5.0,"p":201},{"n":"Electimuss AMBER BLOOM 1мл (унісекс) Англія","b":"Electimuss","g":"Розпив","v":973,"q":5.0,"p":195},{"n":"Matiere Premier METAL LAVANDER 1мл (унісекс) Франція","b":"Matiere Premier","g":"Розпив","v":959,"q":5.0,"p":192},{"n":"Louis Vuitton AMBRE LEVANT 1мл (унісекс)Франція","b":"Louis Vuitton","g":"Розпив","v":927,"q":3.0,"p":309},{"n":"Toskovat PORNSTAR 1мл (унісекс) EU","b":"Toskovat","g":"Розпив","v":880,"q":2.0,"p":440},{"n":"Giardini Di Toscana DUCCI BIANCO LATTE 1мл (жін.) Італія","b":"Giardini Di Toscana","g":"Розпив","v":866,"q":10.0,"p":87},{"n":"Louis Vuitton SYMPHONY 1мл (унісекс)Франція","b":"Louis Vuitton","g":"Розпив","v":862,"q":2.0,"p":431},{"n":"Тональна основа MARK WIRLEN Cream Beige Soft Velvet Foundation 15мл 55667323","b":"Mark Wirlen","g":"Косметика","v":850,"q":1.0,"p":850},{"n":"Флакон для парфумів 3мл (товсте скло,спрей метал)","b":"Флакон/тара","g":"Розпив","v":829,"q":29.0,"p":29},{"n":"Les Liquides Imaginaires BLANCHE BETE 1мл (унісекс) Франція","b":"Les Liquides Imaginaires","g":"Розпив","v":822,"q":5.0,"p":164},{"n":"YvesSaintLaurent LIBRE FLOWERS&FLAMES 1мл (жін.) Франція","b":"YvesSaintLaurent","g":"Розпив","v":779,"q":8.0,"p":97},{"n":"Флакон для парфумів 5мл (товсте скло,спрей метал)","b":"Флакон/тара","g":"Розпив","v":733,"q":22.0,"p":33},{"n":"Louis Vuitton AFTERNON SWIM 1мл (унісекс)Франція","b":"Louis Vuitton","g":"Розпив","v":724,"q":3.0,"p":241},{"n":"Tiziana Terenzi KIRKE OVERDOSE 1мл (унісекс) Італія","b":"Tiziana Terenzi","g":"Розпив","v":617,"q":5.0,"p":123},{"n":"Roja BURLINGTON 1819 edp 1мл (унісекс) Англія","b":"Roja","g":"Розпив","v":611,"q":3.0,"p":204},{"n":"Initio Parfums Prives MUSK THERAPY 1мл (унісекс) Франція","b":"Initio","g":"Розпив","v":568,"q":3.0,"p":189},{"n":"Hormone Paris OXYTOCIN 1мл (унісекс) Франція","b":"Hormone Paris","g":"Розпив","v":567,"q":5.0,"p":113},{"n":"Nasomatto MICODELIRIO 1мл (унісекс) Нідерланди","b":"Nasomatto","g":"Розпив","v":544,"q":2.0,"p":272},{"n":"Filippo Sorcinelli NE IL GIORNO NE L'ORA 1мл (унісекс) Італія","b":"Filippo Sorcinelli","g":"Розпив","v":540,"q":3.0,"p":180},{"n":"By Kilian ANGELS SHARE 1мл (унісекс) Франція","b":"Kilian","g":"Розпив","v":524,"q":3.0,"p":175},{"n":"Essential Parfums THE MUSC 1мл (унісекс) Франція","b":"Essential Parfums","g":"Розпив","v":517,"q":10.0,"p":52},{"n":"Filippo Sorcinelli SCUSAMI 1мл (унісекс) Італія","b":"Filippo Sorcinelli","g":"Розпив","v":483,"q":3.0,"p":161},{"n":"Toskovat INEXCUSABLE EVIL1мл (унісекс) EU","b":"Toskovat","g":"Розпив","v":481,"q":1.0,"p":481},{"n":"Amouage EXISTENCE 1мл (унісекс) Оман","b":"Amouage","g":"Розпив","v":479,"q":2.0,"p":239},{"n":"Floraiku ONE UMBRELLA FOR TWO 1мл (унісекс) Франція","b":"Floraiku","g":"Розпив","v":473,"q":2.0,"p":237},{"n":"Parfums De Marley ALTHAЇR 1мл (чол.) Франція","b":"Parfums De Marley","g":"Розпив","v":465,"q":3.0,"p":155},{"n":"Marc-Antoine Barrois TILIA 1мл (унісекс) Франція","b":"Marc-Antoine Barrois","g":"Розпив","v":445,"q":3.0,"p":148},{"n":"Byredo SUPER CEDAR 1мл (унісекс) Швеція","b":"Byredo","g":"Розпив","v":426,"q":3.0,"p":142},{"n":"Goldfield & Banks PACIFIC ROCK MOSS 1мл(унісекс) Австралія","b":"Goldfield & Banks","g":"Розпив","v":418,"q":3.0,"p":139},{"n":"Electimuss BLACK CAVIAR 1мл (унісекс) Англія","b":"Electimuss","g":"Розпив","v":408,"q":3.0,"p":136},{"n":"Roja APEX 1мл (унісекс) Англія","b":"Roja","g":"Розпив","v":408,"q":3.0,"p":136},{"n":"Essential Parfums BOIS IMPERIAL 1мл (унісекс) Франція","b":"Essential Parfums","g":"Розпив","v":386,"q":5.0,"p":77},{"n":"Club de Nuit Man Intense ARMAF 1мл (чол.) ОАЕ,Франція","b":"Armaf","g":"Розпив","v":384,"q":10.0,"p":38},{"n":"Byredo GIPSY WATER 1мл (унісекс) Швеція","b":"Byredo","g":"Розпив","v":369,"q":3.0,"p":123},{"n":"Coreterno OCEANOIR 1мл (унісекс.) Італія","b":"Coreterno","g":"Розпив","v":335,"q":3.0,"p":112},{"n":"Jean Paul Gaultier LE MALE LE PARFUM 1мл (чол.) Франція/Іспанія","b":"Jean Paul Gaultier","g":"Розпив","v":325,"q":5.0,"p":65},{"n":"Jean Paul Gaultier LE BEAU PARADISE GARDEN 1мл (чол.) Франція/Іспанія","b":"Jean Paul Gaultier","g":"Розпив","v":325,"q":5.0,"p":65},{"n":"Comme Des Garcons WONDERWOOD edp 1мл (чол.)Франція","b":"Comme Des Garcons","g":"Розпив","v":269,"q":5.0,"p":54},{"n":"Флакон для парфумів 10мл (скло,спрей метал)","b":"Флакон/тара","g":"Розпив","v":266,"q":8.0,"p":33},{"n":"Атомайзер чорний для парфумів в металевому флаконі 10мл","b":"Флакон/тара","g":"Розпив","v":129,"q":1.0,"p":129},{"n":"Флакон для парфумів 2мл (скло,спрей метал)","b":"Флакон/тара","g":"Розпив","v":114,"q":6.0,"p":19},{"n":"Флакон для парфумів 30мл (скло,спрей метал)","b":"Флакон/тара","g":"Розпив","v":59,"q":1.0,"p":59},{"n":"Флакон для парфумів 15мл (скло,спрей метал)","b":"Флакон/тара","g":"Розпив","v":46,"q":1.0,"p":46}],"brands":[{"b":"Fragrance Du Bois","v":11086,"q":50.0,"n":2,"p":222},{"b":"Xerjoff","v":9921,"q":56.0,"n":1,"p":177},{"b":"Clive Christian","v":7921,"q":15.0,"n":2,"p":528},{"b":"Louis Vuitton","v":6940,"q":26.0,"n":5,"p":267},{"b":"Roja","v":6392,"q":35.0,"n":5,"p":183},{"b":"Amouage","v":5000,"q":21.0,"n":3,"p":238},{"b":"Fugazzi","v":4480,"q":28.0,"n":2,"p":160},{"b":"Orto Parisi","v":4457,"q":21.0,"n":2,"p":212},{"b":"Filippo Sorcinelli","v":4042,"q":23.0,"n":3,"p":176},{"b":"Ex Nihilo","v":2889,"q":13.0,"n":2,"p":222},{"b":"Jean Paul Gaultier","v":2680,"q":39.0,"n":3,"p":69},{"b":"Genyum","v":2250,"q":15.0,"n":1,"p":150},{"b":"Флакон/тара","v":2176,"q":68.0,"n":7,"p":32},{"b":"Marc-Antoine Barrois","v":1896,"q":13.0,"n":2,"p":146},{"b":"Parfums De Marley","v":1681,"q":8.0,"n":2,"p":210},{"b":"Sospiro","v":1524,"q":8.0,"n":1,"p":190},{"b":"Electimuss","v":1381,"q":8.0,"n":2,"p":173},{"b":"Toskovat","v":1361,"q":3.0,"n":2,"p":454},{"b":"Juliette Has A Gun","v":1330,"q":19.0,"n":1,"p":70},{"b":"Matiere Premier","v":959,"q":5.0,"n":1,"p":192},{"b":"Essential Parfums","v":903,"q":15.0,"n":2,"p":60},{"b":"Giardini Di Toscana","v":866,"q":10.0,"n":1,"p":87},{"b":"Les Liquides Imaginaires","v":822,"q":5.0,"n":1,"p":164},{"b":"Byredo","v":795,"q":6.0,"n":2,"p":132},{"b":"YvesSaintLaurent","v":779,"q":8.0,"n":1,"p":97},{"b":"Tiziana Terenzi","v":617,"q":5.0,"n":1,"p":123},{"b":"Initio","v":568,"q":3.0,"n":1,"p":189},{"b":"Hormone Paris","v":567,"q":5.0,"n":1,"p":113},{"b":"Nasomatto","v":544,"q":2.0,"n":1,"p":272},{"b":"Kilian","v":524,"q":3.0,"n":1,"p":175},{"b":"Floraiku","v":473,"q":2.0,"n":1,"p":236},{"b":"Goldfield & Banks","v":418,"q":3.0,"n":1,"p":139},{"b":"Armaf","v":384,"q":10.0,"n":1,"p":38},{"b":"Coreterno","v":335,"q":3.0,"n":1,"p":112},{"b":"Comme Des Garcons","v":269,"q":5.0,"n":1,"p":54}]};
+let IPD=null, ipFlt='all', ipQry='';
+
+/* коротка назва для осі: відрізаємо дужки, «1мл», зайві пробіли */
+function ipShort(s,max){
+  const t=String(s).split('(')[0].replace(/\s*1\s*мл\s*/gi,' ').replace(/\s+/g,' ').trim();
+  return t.length>max ? t.slice(0,max-1)+'…' : t;
+}
+
+/* горизонтальні бари в стилі дашборда (той самий SVG-підхід, що й у barChart) */
+function hbarChart(el,items,color){
+  const n=items.length; if(!n){el.innerHTML='<div class="ip-empty">Немає даних</div>';return;}
+  const W=900,pl=250,pr=76,pt=8,rowH=26,pb=28;
+  const ih=n*rowH, H=pt+ih+pb, iw=W-pl-pr;
+  const mx=niceMax(Math.max(...items.map(i=>i.value),1));
+  let s=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">`;
+  for(let i=0;i<=4;i++){const x=pl+iw*i/4;
+    s+=`<line class="gline" x1="${x}" y1="${pt}" x2="${x}" y2="${pt+ih}"/>`;
+    s+=`<text class="tick" x="${x}" y="${pt+ih+17}" text-anchor="middle">${fmt(mx*i/4)}</text>`;}
+  items.forEach((it,i)=>{
+    const y=pt+i*rowH+4, bh=rowH-9, w=iw*it.value/mx, cy=y+bh/2+4;
+    s+=`<text class="tick" x="${pl-9}" y="${cy}" text-anchor="end">${esc(it.label)}<title>${esc(it.title)}</title></text>`;
+    s+=`<rect x="${pl}" y="${y}" width="${Math.max(1.5,w)}" height="${bh}" rx="4" fill="${color}"><title>${esc(it.title)}</title></rect>`;
+    s+=`<text class="blab" x="${pl+w+8}" y="${cy}">${fmt(it.value)}</text>`;
+  });
+  el.innerHTML=s+'</svg>';
+}
+
+function ipKpi(){
+  const D=IPD, sh=v=>D.tot?pct(100*v/D.tot):'0.0%';
+  document.getElementById('ipPeriod').textContent=
+    `Товарний зріз з 1С · склад «${D.store}» · період ${D.period} · ${D.npos} позицій`;
+  const cards=[
+    ['Оборот каналу', fmt(D.tot), ' грн', `${D.npos} позицій за період`],
+    ['Розпив', fmt(D.roz), ' грн', `${sh(D.roz)} обороту · ${fmt(D.rozq)} мл · ${D.rozn} поз.`],
+    ['Косметика', fmt(D.cos), ' грн', `${sh(D.cos)} обороту · ${D.cosn} поз.`],
+    ['Середня ціна', fmt(D.avg_ml), ' грн/мл', 'по розпиву']
+  ];
+  document.getElementById('ipK').innerHTML=cards.map(c=>
+    `<div class="kpi"><div class="lab">${c[0]}</div><div class="val">${c[1]}<small>${c[2]}</small></div><div class="sub2">${c[3]}</div></div>`).join('');
+}
+
+function ipCharts(){
+  const top=IPD.rows.filter(r=>r.g==='Розпив').slice(0,15).map(r=>({
+    label:ipShort(r.n,34), value:r.v,
+    title:`${r.n}\n${fmt(r.v)} грн · ${fmt(r.q)} мл · ${fmt(r.p)} грн/мл`}));
+  hbarChart(document.getElementById('ipC1'),top,'#7c8bff');
+  const br=IPD.brands.slice(0,12).map(b=>({
+    label:ipShort(b.b,30), value:b.v,
+    title:`${b.b}\n${fmt(b.v)} грн · ${fmt(b.q)} мл · ${fmt(b.p)} грн/мл · ${b.n} поз.`}));
+  hbarChart(document.getElementById('ipC2'),br,'#3ecf8e');
+}
+
+function ipTable(){
+  const rows=IPD.rows.filter(r=>(ipFlt==='all'||r.g===ipFlt)&&
+    (ipQry===''||(r.n+' '+r.b).toLowerCase().includes(ipQry)));
+  const el=document.getElementById('ipT');
+  const cnt=document.getElementById('ipCount');
+  if(!rows.length){
+    el.innerHTML='<tbody><tr><td class="ip-empty" colspan="6">Нічого не знайдено — спробуй інший запит</td></tr></tbody>';
+    cnt.textContent=`показано 0 з ${IPD.npos} позицій`;return;}
+  let h='<thead><tr><th>#</th><th>Бренд</th><th>Позиція</th><th>Виручка, грн</th><th>мл/шт</th><th>грн/мл</th></tr></thead><tbody>';
+  let sv=0;
+  rows.forEach((r,i)=>{
+    sv+=r.v;
+    const cls=r.p>=300?' hi':r.p<=80?' lo':'';
+    h+=`<tr><td>${i+1}</td><td>${esc(r.b)}</td><td>${esc(r.n)}</td><td>${fmt(r.v)}</td><td>${fmt(r.q)}</td>`+
+       `<td><span class="ip-pill${cls}">${fmt(r.p)}</span></td></tr>`;});
+  h+=`<tr style="font-weight:700;border-top:2px solid var(--accent)"><td></td><td></td><td>Разом (${rows.length})</td>`+
+     `<td>${fmt(sv)}</td><td></td><td></td></tr></tbody>`;
+  document.getElementById('ipT').innerHTML=h;
+  cnt.textContent=`показано ${rows.length} з ${IPD.npos} позицій`;
+}
+
+async function ipBoot(){
+  if(IPD) return;
+  const b=document.getElementById('ipBanner');
+  try{
+    const res=await fetch('inet_products.json?_='+Date.now());
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    IPD=await res.json();
+  }catch(e){
+    IPD=IP_SNAPSHOT;              // запасний варіант: вбудований знімок
+    if(!IPD){
+      b.className='banner err';
+      b.innerHTML='⚠️ Не вдалося завантажити <code>inet_products.json</code>: '+
+        (e&&e.message?e.message:e)+'<br>Поклади файл поряд з index.html.';
+      return;
+    }
+  }
+  b.style.display='none';
+  document.getElementById('ipRoot').style.display='block';
+  ipKpi(); ipCharts(); ipTable();
+}
+
+document.querySelectorAll('.chip[data-ipf]').forEach(el=>el.addEventListener('click',()=>{
+  document.querySelectorAll('.chip[data-ipf]').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on'); ipFlt=el.dataset.ipf; ipTable();}));
+document.getElementById('ipQ').addEventListener('input',e=>{ipQry=e.target.value.trim().toLowerCase();ipTable();});
+
+document.querySelectorAll('#viewSw .chip').forEach(el=>el.addEventListener('click',()=>{
+  document.querySelectorAll('#viewSw .chip').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on');
+  const pr=el.dataset.view==='pr';
+  document.getElementById('chWrap').style.display=pr?'none':'block';
+  document.getElementById('appProd').style.display=pr?'block':'none';
+  document.getElementById('periodLabel').style.display=pr?'none':'block';
+  if(pr) ipBoot();
+}));
 </script>
 </body>
 </html>
