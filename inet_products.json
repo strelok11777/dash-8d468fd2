@@ -1,0 +1,805 @@
+{
+ "period": "01.08.2026 - 31.08.2026",
+ "store": "Інтернет",
+ "tot": 91380,
+ "npos": 68,
+ "roz": 89230,
+ "rozq": 559,
+ "rozn": 66,
+ "cos": 2150,
+ "cosn": 2,
+ "avg_ml": 160,
+ "rows": [
+  {
+   "n": "Xerjoff CASAMORATI 1888 TEMPIO D'ACQUA 1мл (унісекс) Італія",
+   "b": "Xerjoff",
+   "g": "Розпив",
+   "v": 9921,
+   "q": 56.0,
+   "p": 177
+  },
+  {
+   "n": "Fragrance Du Bois LUCIUS MAXIMUS 1мл(унісекс) Франція",
+   "b": "Fragrance Du Bois",
+   "g": "Розпив",
+   "v": 9117,
+   "q": 40.0,
+   "p": 228
+  },
+  {
+   "n": "Clive Christian BLONDE AMBER 1мл (чол.) В.Британія",
+   "b": "Clive Christian",
+   "g": "Розпив",
+   "v": 6600,
+   "q": 12.0,
+   "p": 550
+  },
+  {
+   "n": "Louis Vuitton PACIFIC CHILL 1мл (унісекс)Франція",
+   "b": "Louis Vuitton",
+   "g": "Розпив",
+   "v": 3124,
+   "q": 15.0,
+   "p": 208
+  },
+  {
+   "n": "Filippo Sorcinelli RELIQVIA1мл (унісекс) Італія",
+   "b": "Filippo Sorcinelli",
+   "g": "Розпив",
+   "v": 3019,
+   "q": 17.0,
+   "p": 178
+  },
+  {
+   "n": "Fugazzi ANGEL DUST Extrait de Parfum 1мл (унісекс) Нідерланди",
+   "b": "Fugazzi",
+   "g": "Розпив",
+   "v": 2780,
+   "q": 18.0,
+   "p": 154
+  },
+  {
+   "n": "Amouage GUIDANCE46 1мл (унісекс) Оман",
+   "b": "Amouage",
+   "g": "Розпив",
+   "v": 2400,
+   "q": 8.0,
+   "p": 300
+  },
+  {
+   "n": "Roja ELYSIUM Pour Home edp 1мл (чол.) Англія",
+   "b": "Roja",
+   "g": "Розпив",
+   "v": 2360,
+   "q": 21.0,
+   "p": 112
+  },
+  {
+   "n": "Orto Parisi Parfum BERGAMASK 1мл (унісекс) Нідерланди",
+   "b": "Orto Parisi",
+   "g": "Розпив",
+   "v": 2257,
+   "q": 11.0,
+   "p": 205
+  },
+  {
+   "n": "Genyum PAINTER 1мл (унісекс) Іспанія",
+   "b": "Genyum",
+   "g": "Розпив",
+   "v": 2250,
+   "q": 15.0,
+   "p": 150
+  },
+  {
+   "n": "Orto Parisi Parfum MEGAMARE 1мл (унісекс) Нідерланди",
+   "b": "Orto Parisi",
+   "g": "Розпив",
+   "v": 2200,
+   "q": 10.0,
+   "p": 220
+  },
+  {
+   "n": "Amouage GUIDANCE 1мл (унісекс) Оман",
+   "b": "Amouage",
+   "g": "Розпив",
+   "v": 2121,
+   "q": 11.0,
+   "p": 193
+  },
+  {
+   "n": "Jean Paul Gaultier SCANDAL 1мл (жін.) Франція/Іспанія",
+   "b": "Jean Paul Gaultier",
+   "g": "Розпив",
+   "v": 2030,
+   "q": 29.0,
+   "p": 70
+  },
+  {
+   "n": "Fragrance Du Bois LUCIUS 1мл(унісекс) Франція",
+   "b": "Fragrance Du Bois",
+   "g": "Розпив",
+   "v": 1969,
+   "q": 10.0,
+   "p": 197
+  },
+  {
+   "n": "Ex Nihilo BLUE TALISMAN 1мл (унісекс) Франція",
+   "b": "Ex Nihilo",
+   "g": "Розпив",
+   "v": 1882,
+   "q": 8.0,
+   "p": 235
+  },
+  {
+   "n": "Roja ISOLA BLU 1мл (унісекс) Англія",
+   "b": "Roja",
+   "g": "Розпив",
+   "v": 1850,
+   "q": 5.0,
+   "p": 370
+  },
+  {
+   "n": "Fugazzi ORANGE CRUSH Extrait de Parfum 1мл (унісекс) Нідерланди",
+   "b": "Fugazzi",
+   "g": "Розпив",
+   "v": 1700,
+   "q": 10.0,
+   "p": 170
+  },
+  {
+   "n": "Sospiro Perfumes VIBRATO 1мл(унісекс)Франція",
+   "b": "Sospiro",
+   "g": "Розпив",
+   "v": 1524,
+   "q": 8.0,
+   "p": 190
+  },
+  {
+   "n": "Marc-Antoine Barrois GANYMEDE 1мл (унісекс) Франція",
+   "b": "Marc-Antoine Barrois",
+   "g": "Розпив",
+   "v": 1451,
+   "q": 10.0,
+   "p": 145
+  },
+  {
+   "n": "Juliette Has A Gun PEAR INC. 1мл (унісекс) Франція",
+   "b": "Juliette Has A Gun",
+   "g": "Розпив",
+   "v": 1330,
+   "q": 19.0,
+   "p": 70
+  },
+  {
+   "n": "Clive Christian MATSUKITA 1мл (унісекс.) В.Британія",
+   "b": "Clive Christian",
+   "g": "Розпив",
+   "v": 1321,
+   "q": 3.0,
+   "p": 440
+  },
+  {
+   "n": "Louis Vuitton FANTASMAGORY 1мл (унісекс)Франція",
+   "b": "Louis Vuitton",
+   "g": "Розпив",
+   "v": 1303,
+   "q": 3.0,
+   "p": 434
+  },
+  {
+   "n": "Тональна основа MARK WIRLEN Bamboo Beige Velvet SPF30 30мл 45681378",
+   "b": "Mark Wirlen",
+   "g": "Косметика",
+   "v": 1300,
+   "q": 1.0,
+   "p": 1300
+  },
+  {
+   "n": "Parfums De Marley VALAYA 1мл (жін) Франція",
+   "b": "Parfums De Marley",
+   "g": "Розпив",
+   "v": 1216,
+   "q": 5.0,
+   "p": 243
+  },
+  {
+   "n": "Roja ISOLA VERDE 1мл (унісекс) Англія",
+   "b": "Roja",
+   "g": "Розпив",
+   "v": 1163,
+   "q": 3.0,
+   "p": 388
+  },
+  {
+   "n": "Ex Nihilo THE HEDONIST 1мл (унісекс) Франція",
+   "b": "Ex Nihilo",
+   "g": "Розпив",
+   "v": 1007,
+   "q": 5.0,
+   "p": 201
+  },
+  {
+   "n": "Electimuss AMBER BLOOM 1мл (унісекс) Англія",
+   "b": "Electimuss",
+   "g": "Розпив",
+   "v": 973,
+   "q": 5.0,
+   "p": 195
+  },
+  {
+   "n": "Matiere Premier METAL LAVANDER 1мл (унісекс) Франція",
+   "b": "Matiere Premier",
+   "g": "Розпив",
+   "v": 959,
+   "q": 5.0,
+   "p": 192
+  },
+  {
+   "n": "Louis Vuitton AMBRE LEVANT 1мл (унісекс)Франція",
+   "b": "Louis Vuitton",
+   "g": "Розпив",
+   "v": 927,
+   "q": 3.0,
+   "p": 309
+  },
+  {
+   "n": "Toskovat PORNSTAR 1мл (унісекс) EU",
+   "b": "Toskovat",
+   "g": "Розпив",
+   "v": 880,
+   "q": 2.0,
+   "p": 440
+  },
+  {
+   "n": "Giardini Di Toscana DUCCI BIANCO LATTE 1мл (жін.) Італія",
+   "b": "Giardini Di Toscana",
+   "g": "Розпив",
+   "v": 866,
+   "q": 10.0,
+   "p": 87
+  },
+  {
+   "n": "Louis Vuitton SYMPHONY 1мл (унісекс)Франція",
+   "b": "Louis Vuitton",
+   "g": "Розпив",
+   "v": 862,
+   "q": 2.0,
+   "p": 431
+  },
+  {
+   "n": "Тональна основа MARK WIRLEN Cream Beige Soft Velvet Foundation 15мл 55667323",
+   "b": "Mark Wirlen",
+   "g": "Косметика",
+   "v": 850,
+   "q": 1.0,
+   "p": 850
+  },
+  {
+   "n": "Флакон для парфумів 3мл (товсте скло,спрей метал)",
+   "b": "Флакон/тара",
+   "g": "Розпив",
+   "v": 829,
+   "q": 29.0,
+   "p": 29
+  },
+  {
+   "n": "Les Liquides Imaginaires BLANCHE BETE 1мл (унісекс) Франція",
+   "b": "Les Liquides Imaginaires",
+   "g": "Розпив",
+   "v": 822,
+   "q": 5.0,
+   "p": 164
+  },
+  {
+   "n": "YvesSaintLaurent LIBRE FLOWERS&FLAMES 1мл (жін.) Франція",
+   "b": "YvesSaintLaurent",
+   "g": "Розпив",
+   "v": 779,
+   "q": 8.0,
+   "p": 97
+  },
+  {
+   "n": "Флакон для парфумів 5мл (товсте скло,спрей метал)",
+   "b": "Флакон/тара",
+   "g": "Розпив",
+   "v": 733,
+   "q": 22.0,
+   "p": 33
+  },
+  {
+   "n": "Louis Vuitton AFTERNON SWIM 1мл (унісекс)Франція",
+   "b": "Louis Vuitton",
+   "g": "Розпив",
+   "v": 724,
+   "q": 3.0,
+   "p": 241
+  },
+  {
+   "n": "Tiziana Terenzi KIRKE OVERDOSE 1мл (унісекс) Італія",
+   "b": "Tiziana Terenzi",
+   "g": "Розпив",
+   "v": 617,
+   "q": 5.0,
+   "p": 123
+  },
+  {
+   "n": "Roja BURLINGTON 1819 edp 1мл (унісекс) Англія",
+   "b": "Roja",
+   "g": "Розпив",
+   "v": 611,
+   "q": 3.0,
+   "p": 204
+  },
+  {
+   "n": "Initio Parfums Prives MUSK THERAPY 1мл (унісекс) Франція",
+   "b": "Initio",
+   "g": "Розпив",
+   "v": 568,
+   "q": 3.0,
+   "p": 189
+  },
+  {
+   "n": "Hormone Paris OXYTOCIN 1мл (унісекс) Франція",
+   "b": "Hormone Paris",
+   "g": "Розпив",
+   "v": 567,
+   "q": 5.0,
+   "p": 113
+  },
+  {
+   "n": "Nasomatto MICODELIRIO 1мл (унісекс) Нідерланди",
+   "b": "Nasomatto",
+   "g": "Розпив",
+   "v": 544,
+   "q": 2.0,
+   "p": 272
+  },
+  {
+   "n": "Filippo Sorcinelli NE IL GIORNO NE L'ORA 1мл (унісекс) Італія",
+   "b": "Filippo Sorcinelli",
+   "g": "Розпив",
+   "v": 540,
+   "q": 3.0,
+   "p": 180
+  },
+  {
+   "n": "By Kilian ANGELS SHARE 1мл (унісекс) Франція",
+   "b": "Kilian",
+   "g": "Розпив",
+   "v": 524,
+   "q": 3.0,
+   "p": 175
+  },
+  {
+   "n": "Essential Parfums THE MUSC 1мл (унісекс) Франція",
+   "b": "Essential Parfums",
+   "g": "Розпив",
+   "v": 517,
+   "q": 10.0,
+   "p": 52
+  },
+  {
+   "n": "Filippo Sorcinelli SCUSAMI 1мл (унісекс) Італія",
+   "b": "Filippo Sorcinelli",
+   "g": "Розпив",
+   "v": 483,
+   "q": 3.0,
+   "p": 161
+  },
+  {
+   "n": "Toskovat INEXCUSABLE EVIL1мл (унісекс) EU",
+   "b": "Toskovat",
+   "g": "Розпив",
+   "v": 481,
+   "q": 1.0,
+   "p": 481
+  },
+  {
+   "n": "Amouage EXISTENCE 1мл (унісекс) Оман",
+   "b": "Amouage",
+   "g": "Розпив",
+   "v": 479,
+   "q": 2.0,
+   "p": 239
+  },
+  {
+   "n": "Floraiku ONE UMBRELLA FOR TWO 1мл (унісекс) Франція",
+   "b": "Floraiku",
+   "g": "Розпив",
+   "v": 473,
+   "q": 2.0,
+   "p": 237
+  },
+  {
+   "n": "Parfums De Marley ALTHAЇR 1мл (чол.) Франція",
+   "b": "Parfums De Marley",
+   "g": "Розпив",
+   "v": 465,
+   "q": 3.0,
+   "p": 155
+  },
+  {
+   "n": "Marc-Antoine Barrois TILIA 1мл (унісекс) Франція",
+   "b": "Marc-Antoine Barrois",
+   "g": "Розпив",
+   "v": 445,
+   "q": 3.0,
+   "p": 148
+  },
+  {
+   "n": "Byredo SUPER CEDAR 1мл (унісекс) Швеція",
+   "b": "Byredo",
+   "g": "Розпив",
+   "v": 426,
+   "q": 3.0,
+   "p": 142
+  },
+  {
+   "n": "Goldfield & Banks PACIFIC ROCK MOSS 1мл(унісекс) Австралія",
+   "b": "Goldfield & Banks",
+   "g": "Розпив",
+   "v": 418,
+   "q": 3.0,
+   "p": 139
+  },
+  {
+   "n": "Electimuss BLACK CAVIAR 1мл (унісекс) Англія",
+   "b": "Electimuss",
+   "g": "Розпив",
+   "v": 408,
+   "q": 3.0,
+   "p": 136
+  },
+  {
+   "n": "Roja APEX 1мл (унісекс) Англія",
+   "b": "Roja",
+   "g": "Розпив",
+   "v": 408,
+   "q": 3.0,
+   "p": 136
+  },
+  {
+   "n": "Essential Parfums BOIS IMPERIAL 1мл (унісекс) Франція",
+   "b": "Essential Parfums",
+   "g": "Розпив",
+   "v": 386,
+   "q": 5.0,
+   "p": 77
+  },
+  {
+   "n": "Club de Nuit Man Intense ARMAF 1мл (чол.) ОАЕ,Франція",
+   "b": "Armaf",
+   "g": "Розпив",
+   "v": 384,
+   "q": 10.0,
+   "p": 38
+  },
+  {
+   "n": "Byredo GIPSY WATER 1мл (унісекс) Швеція",
+   "b": "Byredo",
+   "g": "Розпив",
+   "v": 369,
+   "q": 3.0,
+   "p": 123
+  },
+  {
+   "n": "Coreterno OCEANOIR 1мл (унісекс.) Італія",
+   "b": "Coreterno",
+   "g": "Розпив",
+   "v": 335,
+   "q": 3.0,
+   "p": 112
+  },
+  {
+   "n": "Jean Paul Gaultier LE MALE LE PARFUM 1мл (чол.) Франція/Іспанія",
+   "b": "Jean Paul Gaultier",
+   "g": "Розпив",
+   "v": 325,
+   "q": 5.0,
+   "p": 65
+  },
+  {
+   "n": "Jean Paul Gaultier LE BEAU PARADISE GARDEN 1мл (чол.) Франція/Іспанія",
+   "b": "Jean Paul Gaultier",
+   "g": "Розпив",
+   "v": 325,
+   "q": 5.0,
+   "p": 65
+  },
+  {
+   "n": "Comme Des Garcons WONDERWOOD edp 1мл (чол.)Франція",
+   "b": "Comme Des Garcons",
+   "g": "Розпив",
+   "v": 269,
+   "q": 5.0,
+   "p": 54
+  },
+  {
+   "n": "Флакон для парфумів 10мл (скло,спрей метал)",
+   "b": "Флакон/тара",
+   "g": "Розпив",
+   "v": 266,
+   "q": 8.0,
+   "p": 33
+  },
+  {
+   "n": "Атомайзер чорний для парфумів в металевому флаконі 10мл",
+   "b": "Флакон/тара",
+   "g": "Розпив",
+   "v": 129,
+   "q": 1.0,
+   "p": 129
+  },
+  {
+   "n": "Флакон для парфумів 2мл (скло,спрей метал)",
+   "b": "Флакон/тара",
+   "g": "Розпив",
+   "v": 114,
+   "q": 6.0,
+   "p": 19
+  },
+  {
+   "n": "Флакон для парфумів 30мл (скло,спрей метал)",
+   "b": "Флакон/тара",
+   "g": "Розпив",
+   "v": 59,
+   "q": 1.0,
+   "p": 59
+  },
+  {
+   "n": "Флакон для парфумів 15мл (скло,спрей метал)",
+   "b": "Флакон/тара",
+   "g": "Розпив",
+   "v": 46,
+   "q": 1.0,
+   "p": 46
+  }
+ ],
+ "brands": [
+  {
+   "b": "Fragrance Du Bois",
+   "v": 11086,
+   "q": 50.0,
+   "n": 2,
+   "p": 222
+  },
+  {
+   "b": "Xerjoff",
+   "v": 9921,
+   "q": 56.0,
+   "n": 1,
+   "p": 177
+  },
+  {
+   "b": "Clive Christian",
+   "v": 7921,
+   "q": 15.0,
+   "n": 2,
+   "p": 528
+  },
+  {
+   "b": "Louis Vuitton",
+   "v": 6940,
+   "q": 26.0,
+   "n": 5,
+   "p": 267
+  },
+  {
+   "b": "Roja",
+   "v": 6392,
+   "q": 35.0,
+   "n": 5,
+   "p": 183
+  },
+  {
+   "b": "Amouage",
+   "v": 5000,
+   "q": 21.0,
+   "n": 3,
+   "p": 238
+  },
+  {
+   "b": "Fugazzi",
+   "v": 4480,
+   "q": 28.0,
+   "n": 2,
+   "p": 160
+  },
+  {
+   "b": "Orto Parisi",
+   "v": 4457,
+   "q": 21.0,
+   "n": 2,
+   "p": 212
+  },
+  {
+   "b": "Filippo Sorcinelli",
+   "v": 4042,
+   "q": 23.0,
+   "n": 3,
+   "p": 176
+  },
+  {
+   "b": "Ex Nihilo",
+   "v": 2889,
+   "q": 13.0,
+   "n": 2,
+   "p": 222
+  },
+  {
+   "b": "Jean Paul Gaultier",
+   "v": 2680,
+   "q": 39.0,
+   "n": 3,
+   "p": 69
+  },
+  {
+   "b": "Genyum",
+   "v": 2250,
+   "q": 15.0,
+   "n": 1,
+   "p": 150
+  },
+  {
+   "b": "Флакон/тара",
+   "v": 2176,
+   "q": 68.0,
+   "n": 7,
+   "p": 32
+  },
+  {
+   "b": "Marc-Antoine Barrois",
+   "v": 1896,
+   "q": 13.0,
+   "n": 2,
+   "p": 146
+  },
+  {
+   "b": "Parfums De Marley",
+   "v": 1681,
+   "q": 8.0,
+   "n": 2,
+   "p": 210
+  },
+  {
+   "b": "Sospiro",
+   "v": 1524,
+   "q": 8.0,
+   "n": 1,
+   "p": 190
+  },
+  {
+   "b": "Electimuss",
+   "v": 1381,
+   "q": 8.0,
+   "n": 2,
+   "p": 173
+  },
+  {
+   "b": "Toskovat",
+   "v": 1361,
+   "q": 3.0,
+   "n": 2,
+   "p": 454
+  },
+  {
+   "b": "Juliette Has A Gun",
+   "v": 1330,
+   "q": 19.0,
+   "n": 1,
+   "p": 70
+  },
+  {
+   "b": "Matiere Premier",
+   "v": 959,
+   "q": 5.0,
+   "n": 1,
+   "p": 192
+  },
+  {
+   "b": "Essential Parfums",
+   "v": 903,
+   "q": 15.0,
+   "n": 2,
+   "p": 60
+  },
+  {
+   "b": "Giardini Di Toscana",
+   "v": 866,
+   "q": 10.0,
+   "n": 1,
+   "p": 87
+  },
+  {
+   "b": "Les Liquides Imaginaires",
+   "v": 822,
+   "q": 5.0,
+   "n": 1,
+   "p": 164
+  },
+  {
+   "b": "Byredo",
+   "v": 795,
+   "q": 6.0,
+   "n": 2,
+   "p": 132
+  },
+  {
+   "b": "YvesSaintLaurent",
+   "v": 779,
+   "q": 8.0,
+   "n": 1,
+   "p": 97
+  },
+  {
+   "b": "Tiziana Terenzi",
+   "v": 617,
+   "q": 5.0,
+   "n": 1,
+   "p": 123
+  },
+  {
+   "b": "Initio",
+   "v": 568,
+   "q": 3.0,
+   "n": 1,
+   "p": 189
+  },
+  {
+   "b": "Hormone Paris",
+   "v": 567,
+   "q": 5.0,
+   "n": 1,
+   "p": 113
+  },
+  {
+   "b": "Nasomatto",
+   "v": 544,
+   "q": 2.0,
+   "n": 1,
+   "p": 272
+  },
+  {
+   "b": "Kilian",
+   "v": 524,
+   "q": 3.0,
+   "n": 1,
+   "p": 175
+  },
+  {
+   "b": "Floraiku",
+   "v": 473,
+   "q": 2.0,
+   "n": 1,
+   "p": 236
+  },
+  {
+   "b": "Goldfield & Banks",
+   "v": 418,
+   "q": 3.0,
+   "n": 1,
+   "p": 139
+  },
+  {
+   "b": "Armaf",
+   "v": 384,
+   "q": 10.0,
+   "n": 1,
+   "p": 38
+  },
+  {
+   "b": "Coreterno",
+   "v": 335,
+   "q": 3.0,
+   "n": 1,
+   "p": 112
+  },
+  {
+   "b": "Comme Des Garcons",
+   "v": 269,
+   "q": 5.0,
+   "n": 1,
+   "p": 54
+  }
+ ]
+}
